@@ -44,10 +44,10 @@ export default function Login() {
         <div className="card-body">
           {/* Header */}
           <div className="text-center pb-6">
-            <div className="mx-auto w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center mb-4 animate-bounce-slow">
+            <div className="mx-auto w-12 h-12 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl flex items-center justify-center mb-4 animate-bounce-slow">
               <Lock className="w-6 h-6 text-white" />
             </div>
-            <h2 className="card-title text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent justify-center">
+            <h2 className="card-title text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent justify-center">
               Welcome Back
             </h2>
             <p className="text-gray-600 mt-2">Sign in to your account to continue</p>
