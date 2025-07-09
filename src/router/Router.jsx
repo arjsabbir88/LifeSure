@@ -5,8 +5,8 @@ import Policies from "../pages/policies/policies/Policies";
 import PolicyDetails from "../pages/policies/PolicyDetails/PolicyDetails";
 import Agents from "../pages/agents/Agents";
 import FAQs from "../pages/faqs/FAQs";
-import Login from "../pages/authencation/login/Login";
-import Register from "../pages/authencation/register/Register";
+import Login from "../pages/authentication/login/Login";
+import Register from "../pages/authentication/register/Register";
 
 export const Router = createBrowserRouter([
   {

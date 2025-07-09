@@ -11,7 +11,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
@@ -81,3 +81,4 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext value={authData}>{children}</AuthContext>;
 };
+

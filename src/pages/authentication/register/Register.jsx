@@ -1,13 +1,26 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Github, Chrome } from "lucide-react"
-import { Link } from "react-router"
+import { useContext, useState } from "react";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  ArrowRight,
+  Github,
+  Chrome,
+} from "lucide-react";
+import { Link } from "react-router";
+import { AuthContext } from "../../../authProvider/AuthProvider";
 
 export default function Register() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const { user, createUser, loginWithGoogle, updateUser, setUser, loading } =
+    useContext(AuthContext);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -15,59 +28,76 @@ export default function Register() {
     password: "",
     confirmPassword: "",
     agreeToTerms: false,
-  })
+  });
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Basic validation
-    const newErrors = {}
+    const newErrors = {};
 
     if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required"
+      newErrors.firstName = "First name is required";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
+      newErrors.email = "Email is required";
     }
 
     if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters"
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match"
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
     if (!formData.agreeToTerms) {
-      newErrors.agreeToTerms = "You must agree to the terms"
+      newErrors.agreeToTerms = "You must agree to the terms";
     }
 
-    setErrors(newErrors)
+    setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      setIsLoading(true)
+      setIsLoading(true);
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      setIsLoading(false)
-      console.log("Registration attempt:", formData)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setIsLoading(false);
+      console.log("Registration attempt:", formData);
     }
-  }
+
+    // call createUser function here
+    createUser(formData.email, formData.password)
+      .then((res) => {
+        console.log("user created successfully", res);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          agreeToTerms: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }))
+    }));
 
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }))
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 relative overflow-hidden">
@@ -97,7 +127,9 @@ export default function Register() {
             <div className="grid grid-cols-2 gap-3">
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-medium text-gray-700">First Name</span>
+                  <span className="label-text font-medium text-gray-700">
+                    First Name
+                  </span>
                 </label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -115,14 +147,18 @@ export default function Register() {
                 </div>
                 {errors.firstName && (
                   <label className="label">
-                    <span className="label-text-alt text-error">{errors.firstName}</span>
+                    <span className="label-text-alt text-error">
+                      {errors.firstName}
+                    </span>
                   </label>
                 )}
               </div>
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-medium text-gray-700">Last Name</span>
+                  <span className="label-text font-medium text-gray-700">
+                    Last Name
+                  </span>
                 </label>
                 <input
                   type="text"
@@ -138,7 +174,9 @@ export default function Register() {
             {/* Email Field */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium text-gray-700">Email Address</span>
+                <span className="label-text font-medium text-gray-700">
+                  Email Address
+                </span>
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -156,7 +194,9 @@ export default function Register() {
               </div>
               {errors.email && (
                 <label className="label">
-                  <span className="label-text-alt text-error">{errors.email}</span>
+                  <span className="label-text-alt text-error">
+                    {errors.email}
+                  </span>
                 </label>
               )}
             </div>
@@ -164,7 +204,9 @@ export default function Register() {
             {/* Password Field */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium text-gray-700">Password</span>
+                <span className="label-text font-medium text-gray-700">
+                  Password
+                </span>
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -184,12 +226,18 @@ export default function Register() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
               {errors.password && (
                 <label className="label">
-                  <span className="label-text-alt text-error">{errors.password}</span>
+                  <span className="label-text-alt text-error">
+                    {errors.password}
+                  </span>
                 </label>
               )}
             </div>
@@ -197,7 +245,9 @@ export default function Register() {
             {/* Confirm Password Field */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium text-gray-700">Confirm Password</span>
+                <span className="label-text font-medium text-gray-700">
+                  Confirm Password
+                </span>
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -208,7 +258,9 @@ export default function Register() {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   className={`input input-bordered w-full pl-10 pr-10 h-12 transition-all duration-300 hover:border-gray-300 ${
-                    errors.confirmPassword ? "input-error" : "focus:input-primary"
+                    errors.confirmPassword
+                      ? "input-error"
+                      : "focus:input-primary"
                   }`}
                   required
                 />
@@ -217,12 +269,18 @@ export default function Register() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
               {errors.confirmPassword && (
                 <label className="label">
-                  <span className="label-text-alt text-error">{errors.confirmPassword}</span>
+                  <span className="label-text-alt text-error">
+                    {errors.confirmPassword}
+                  </span>
                 </label>
               )}
             </div>
@@ -252,7 +310,9 @@ export default function Register() {
               </label>
               {errors.agreeToTerms && (
                 <label className="label">
-                  <span className="label-text-alt text-error">{errors.agreeToTerms}</span>
+                  <span className="label-text-alt text-error">
+                    {errors.agreeToTerms}
+                  </span>
                 </label>
               )}
             </div>
@@ -295,7 +355,7 @@ export default function Register() {
           {/* Login Link */}
           <div className="text-center text-sm text-gray-600 mt-4">
             Already have an account?{" "}
-            <Link to='/auth/login' className="link link-primary font-medium">
+            <Link to="/auth/login" className="link link-primary font-medium">
               Login here
             </Link>
           </div>
@@ -317,7 +377,7 @@ export default function Register() {
             transform: translate(0px, 0px) scale(1);
           }
         }
-        
+
         @keyframes fade-in-up {
           0% {
             opacity: 0;
@@ -328,36 +388,37 @@ export default function Register() {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes bounce-slow {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {
             transform: translateY(-10px);
           }
         }
-        
+
         .animate-blob {
           animation: blob 7s infinite;
         }
-        
+
         .animation-delay-2000 {
           animation-delay: 2s;
         }
-        
+
         .animation-delay-4000 {
           animation-delay: 4s;
         }
-        
+
         .animate-fade-in-up {
           animation: fade-in-up 0.6s ease-out;
         }
-        
+
         .animate-bounce-slow {
           animation: bounce-slow 3s ease-in-out infinite;
         }
       `}</style>
     </div>
-  )
+  );
 }
