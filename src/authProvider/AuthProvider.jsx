@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
     );
   };
 
+
   // create user by the register page
   // createUserWithEmailAndPassword is the firebase function to create a user
   const createUser = (email, password) => {

@@ -7,6 +7,10 @@ import Agents from "../pages/agents/Agents";
 import FAQs from "../pages/faqs/FAQs";
 import Login from "../pages/authentication/login/Login";
 import Register from "../pages/authentication/register/Register";
+import Dashboard from "../dashboard/dashboard/Dashboard";
+import AdminDashboard from "../dashboard/admin/adminDashboard/AdminDashboard";
+import ManagePolicies from "../dashboard/admin/managePolicies/ManagePolicies";
+import AddPolicy from "../dashboard/admin/addPolicy/AddPolicy";
 
 export const Router = createBrowserRouter([
   {
@@ -22,25 +26,43 @@ export const Router = createBrowserRouter([
         Component: Policies,
       },
       {
-        path: '/policiesDetails',
-        Component: PolicyDetails
+        path: "/policiesDetails",
+        Component: PolicyDetails,
       },
       {
-        path: '/agents',
-        Component: Agents
+        path: "/agents",
+        Component: Agents,
       },
       {
-        path: '/faqs',
-        Component: FAQs
+        path: "/faqs",
+        Component: FAQs,
       },
       {
-        path: '/auth/login',
-        Component: Login
+        path: "/auth/login",
+        Component: Login,
       },
       {
-        path: '/auth/register',
-        Component: Register
-      }
+        path: "/auth/register",
+        Component: Register,
+      },
+      {
+        path: "/dashboard",
+        Component: Dashboard,
+        children: [
+          {
+            index: true,
+            Component: AdminDashboard,
+          },
+          {
+            path: "admin/dashboard/manage-policies",
+            Component: ManagePolicies,
+          },
+          {
+            path: "/dashboard/admin/dashboard/manage-policies/add-policy",
+            Component: AddPolicy,
+          }
+        ],
+      },
     ],
   },
 ]);

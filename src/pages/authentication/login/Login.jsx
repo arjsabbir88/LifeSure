@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Github, Chrome } from "lucide-react"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
+import { AuthContext } from "@/authProvider/AuthProvider"
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
@@ -12,6 +13,10 @@ export default function Login() {
     password: "",
   })
 
+  const navigate = useNavigate()
+
+  const {user,loading,signIn,googleSignIn,setLoading}= useContext(AuthContext)
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
@@ -20,7 +25,32 @@ export default function Login() {
     await new Promise((resolve) => setTimeout(resolve, 2000))
     setIsLoading(false)
 
+    signIn(formData.email, formData.password)
+    .then((res)=>{
+      console.log("login Successfully", res.user);
+      setLoading(false)
+      navigate('/')
+    }).catch((err)=>{
+      console.log("login failed", err.message);
+    })
+
     console.log("Login attempt:", formData)
+  }
+
+
+  const loginWithGoogle =()=>{
+    googleSignIn()
+    .then((res)=>{
+      console.log("google login Successfully", res.user);
+      setLoading(false)
+      navigate('/')
+    }).catch((err)=>{
+      console.log("google login failed", err.message);
+    })
+  }
+
+  if(loading){
+    return <p>components is loading .........</p>
   }
 
   const handleInputChange = (e) => {
@@ -139,7 +169,7 @@ export default function Login() {
               <Github className="w-4 h-4 mr-2" />
               GitHub
             </button>
-            <button className="btn btn-outline h-12 hover:bg-gray-50 transition-all duration-300 transform hover:scale-[1.02]">
+            <button onClick={loginWithGoogle} className="btn btn-outline h-12 hover:bg-gray-50 transition-all duration-300 transform hover:scale-[1.02]">
               <Chrome className="w-4 h-4 mr-2" />
               Google
             </button>
