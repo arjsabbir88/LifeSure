@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,11 +30,15 @@ import {
   FileText,
   ImageIcon,
 } from "lucide-react";
+import { AuthContext } from "@/authProvider/AuthProvider";
+
 
 export default function AddPolicy() {
   const [imageUploadType, setImageUploadType] = useState("url");
   const [selectedDurations, setSelectedDurations] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const {user} = useContext(AuthContext);
+
 
   const handleDurationToggle = (duration) => {
     setSelectedDurations((prev) =>
@@ -46,12 +50,18 @@ export default function AddPolicy() {
 
   const handleAddPolicySubmit = (e) => {
     e.preventDefault();
+    
+    const createdAt = new Date().toISOString();
+    const createdBY = user?.email;
 
     const form = e.target;
     const formData = new FormData(form);
     const convertedData = Object.fromEntries(formData.entries());
+
     convertedData.durations = selectedDurations;
     convertedData.category = selectedCategory;
+    convertedData.createdAt = createdAt;
+    convertedData.createdBY = createdBY;
     console.log("form data", convertedData);
   };
 
