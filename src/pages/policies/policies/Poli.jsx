@@ -26,7 +26,7 @@ export default function InsurancePolicies() {
     "disability",
   ];
 
-  console.log('insurancePolicies', insurancePolicies)
+  console.log("insurancePolicies", insurancePolicies);
 
   // Filter policies based on selected category
   const filteredPolicies = useMemo(() => {
@@ -64,7 +64,7 @@ export default function InsurancePolicies() {
   return (
     <div className="min-h-screen bg-base-100">
       {/* Header */}
-      <div className="bg-green-400 text-primary-content py-8">
+      <div className="bg-gradient-to-r from-green-600 to-green-400 text-primary-content py-8">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold text-center text-black">
             Insurance Policies
@@ -81,7 +81,7 @@ export default function InsurancePolicies() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-semibold">Available Policies</h2>
-              <div className="badge badge-success badge-xl px-3">
+              <div className="badge badge-success badge-xl px-3 bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
                 {filteredPolicies.length}
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function InsurancePolicies() {
                   onClick={() => handleCategoryChange(category)}
                   className={`btn btn-sm ${
                     selectedCategory === category
-                      ? "btn-success"
+                      ? "btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
                       : "btn-outline"
                   }`}
                 >
