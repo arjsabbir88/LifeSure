@@ -24,6 +24,7 @@ export const Router = createBrowserRouter([
       {
         path: "/policies",
         Component: Policies,
+        loader: ()=> fetch('http://localhost:3000/policies')
       },
       {
         path: "/policiesDetails",

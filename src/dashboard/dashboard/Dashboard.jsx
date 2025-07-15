@@ -1,15 +1,14 @@
-
 import React from "react";
 import { Link } from "react-router";
 import { Outlet } from "react-router";
 
 const Dashboard = () => {
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open bg-green-100">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         <div>
-            <Outlet/>
+          <Outlet />
         </div>
         <label
           htmlFor="my-drawer-2"
@@ -24,13 +23,23 @@ const Dashboard = () => {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+        <ul className="menu bg-green-300 text-base-content min-h-full w-80 p-4">
           {/* Sidebar content here */}
           <li>
-            <Link to='admin/dashboard/manage-policies'>Manage Policies</Link>
+            <Link> Manage Applications</Link>
           </li>
           <li>
-            <a>Sidebar Item 2</a>
+            <Link>Manage Users</Link>
+          </li>
+
+          <li>
+            <Link to="admin/dashboard/manage-policies">Manage Policies</Link>
+          </li>
+          <li>
+            <Link>Manage Transactions</Link>
+          </li>
+          <li>
+            <Link> Manage Agents</Link>
           </li>
         </ul>
       </div>

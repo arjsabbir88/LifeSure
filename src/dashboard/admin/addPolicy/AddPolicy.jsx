@@ -31,14 +31,15 @@ import {
   ImageIcon,
 } from "lucide-react";
 import { AuthContext } from "@/authProvider/AuthProvider";
-
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { toast } from "sonner";
 
 export default function AddPolicy() {
   const [imageUploadType, setImageUploadType] = useState("url");
   const [selectedDurations, setSelectedDurations] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const {user} = useContext(AuthContext);
-
+  const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
 
   const handleDurationToggle = (duration) => {
     setSelectedDurations((prev) =>
@@ -50,7 +51,7 @@ export default function AddPolicy() {
 
   const handleAddPolicySubmit = (e) => {
     e.preventDefault();
-    
+
     const createdAt = new Date().toISOString();
     const createdBY = user?.email;
 
@@ -63,6 +64,23 @@ export default function AddPolicy() {
     convertedData.createdAt = createdAt;
     convertedData.createdBY = createdBY;
     console.log("form data", convertedData);
+
+    // send data to the server
+    axiosSecure
+      .post("/policies", convertedData)
+      .then((response) => {
+        console.log("policy added successfully", response.data);
+
+        if (response.data.insertedId) {
+          toast.success("Policy Added Successfully");
+          setSelectedDurations([]);
+          setSelectedCategory("");
+          form.reset();
+        }
+      })
+      .catch((error) => {
+        console.log("error adding policy", error);
+      });
   };
 
   const durationOptions = [
