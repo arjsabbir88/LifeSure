@@ -27,8 +27,9 @@ export const Router = createBrowserRouter([
         loader: ()=> fetch('http://localhost:3000/policies')
       },
       {
-        path: "/policiesDetails",
+        path: "/policiesDetails/:id",
         Component: PolicyDetails,
+        loader: ({ params }) => fetch(`http://localhost:3000/policies/${params.id}`)
       },
       {
         path: "/agents",

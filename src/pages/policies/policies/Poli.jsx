@@ -6,7 +6,7 @@ import {
   ChevronRightIcon,
   FunnelIcon,
 } from "@heroicons/react/24/outline";
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData } from "react-router";
 
 // Sample insurance policies data
 
@@ -120,9 +120,9 @@ export default function InsurancePolicies() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentPolicies.map((policy) => (
             <div
-              key={policy.id}
+              key={policy._id}
               className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow cursor-pointer border border-base-200"
-              onClick={() => handlePolicyClick(policy.id)}
+              onClick={() => handlePolicyClick(policy._id)}
             >
               <figure className="px-4 pt-4">
                 <img
@@ -156,9 +156,9 @@ export default function InsurancePolicies() {
                   <div className="text-xs text-base-content/60">
                     Coverage: ${policy.coverageRange}
                   </div>
-                  <button className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
+                  <Link to={`/policiesDetails/${policy._id}`} className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
                     View Details
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
