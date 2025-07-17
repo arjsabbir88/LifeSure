@@ -33,11 +33,13 @@ import {
 import { AuthContext } from "@/authProvider/AuthProvider";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { toast } from "sonner";
+import AdvancedPolicyFields from "./AdvancePolicyField";
 
 export default function AddPolicy() {
   const [imageUploadType, setImageUploadType] = useState("url");
   const [selectedDurations, setSelectedDurations] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [extraData, setExtraData] = useState(null);
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
 
@@ -63,6 +65,9 @@ export default function AddPolicy() {
     convertedData.category = selectedCategory;
     convertedData.createdAt = createdAt;
     convertedData.createdBY = createdBY;
+    convertedData.extraData = extraData;
+    convertedData.isActive = true;
+    convertedData.rating= 0;
     console.log("form data", convertedData);
 
     // send data to the server
@@ -75,6 +80,7 @@ export default function AddPolicy() {
           toast.success("Policy Added Successfully");
           setSelectedDurations([]);
           setSelectedCategory("");
+          setExtraData(null);
           form.reset();
         }
       })
@@ -140,6 +146,7 @@ export default function AddPolicy() {
                       name="policyTitle"
                       placeholder="e.g., Premium Life Insurance Plan"
                       className="h-11"
+                      required
                     />
                   </div>
 
@@ -158,6 +165,9 @@ export default function AddPolicy() {
                         <SelectItem value="none">None</SelectItem>
                         <SelectItem value="term-life">
                           Term Life Insurance
+                        </SelectItem>
+                        <SelectItem value="family">
+                          Family Insurance
                         </SelectItem>
                         <SelectItem value="whole-life">
                           Whole Life Insurance
@@ -184,6 +194,7 @@ export default function AddPolicy() {
                     name="description"
                     placeholder="Provide a detailed description of the policy benefits, coverage, and key features..."
                     className="min-h-[120px] resize-none"
+                    required
                   />
                 </div>
               </div>
@@ -210,6 +221,7 @@ export default function AddPolicy() {
                       min="0"
                       max="100"
                       className="h-11"
+                      required
                     />
                   </div>
 
@@ -225,6 +237,7 @@ export default function AddPolicy() {
                       min="0"
                       max="100"
                       className="h-11"
+                      required
                     />
                   </div>
                 </div>
@@ -328,6 +341,13 @@ export default function AddPolicy() {
                 </div>
               </div>
 
+
+              {/* Add policy document here */}
+                <div>
+                  <AdvancedPolicyFields onChange={setExtraData}/>
+                </div>
+
+
               {/* Policy Image */}
               <div className="grid gap-6">
                 <div className="flex items-center gap-2 mb-4">
@@ -356,6 +376,7 @@ export default function AddPolicy() {
                       type="url"
                       placeholder="https://example.com/policy-image.jpg"
                       className="h-11"
+                      required
                     />
                     <p className="text-xs text-gray-500">
                       Provide a direct link to the policy image
