@@ -80,11 +80,11 @@ export default function PolicyDetails() {
 
   console.log("policyData.durations", policyData.durations);
 
-  const handleGetQuote = () => {
-    // Redirect to quote page
-    console.log("Redirecting to quote page...");
-    // window.location.href = "/quote"
-  };
+  // const handleGetQuote = () => {
+  //   // Redirect to quote page
+  //   console.log("Redirecting to quote page...");
+  //   // window.location.href = "/quote"
+  // };
 
   const handleBookConsultation = () => {
     // Redirect to agent consultation booking
@@ -108,6 +108,39 @@ export default function PolicyDetails() {
     });
   };
 
+  // premium estimate form submission handler
+
+  const handlePremiumEstimate = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const convertedDataEstimate = Object.fromEntries(formData.entries());
+    // console.log("premium estimate data", convertedDataEstimate);
+    const { age, coverageAmount, duration, smoker } = convertedDataEstimate;
+
+    console.log(age, coverageAmount, duration, smoker);
+
+    // Coverage Amount: $20,00,000
+    // Rate per 1000 coverage: $8
+    // Age Factor: 1.5 (for age 40+)
+    // Smoker Factor: 1.3 (if smoker)
+    // Duration Factor: 0.95 (if 20+ years for discount)
+
+    const rateCoverage = 8;
+    const ageFactor = age >=40 ? 1.5 : 1;
+    const smokerFactor = smoker === 'yes'? 1.3 : 1;
+    const durationFactor = duration.includes('10') ? 0.95 : 1;
+
+    // console.log(rateCoverage, ageFactor, smokerFactor, durationFactor)
+
+    const basePremium = (coverageAmount / 1000)* rateCoverage;
+    const estimatedPremiumAnnul = Math.ceil(basePremium * ageFactor* smokerFactor * durationFactor);
+    const estimatedPremiumMonthly = Math.ceil(estimatedPremiumAnnul / 12)
+
+    console.log("Estimated premium: ", estimatedPremiumAnnul, estimatedPremiumMonthly);
+
+  };
+
   return (
     <div className="min-h-screen bg-green-100">
       {/* Hero Section */}
@@ -126,7 +159,9 @@ export default function PolicyDetails() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 className="btn btn-soft btn-lg hover:scale-105 transition-transform hover:bg-transparent hover:text-green-800"
-                onClick={handleGetQuote}
+                onClick={() =>
+                  document.getElementById("my_modal_3").showModal()
+                }
               >
                 Get Quote Now
               </button>
@@ -328,7 +363,7 @@ export default function PolicyDetails() {
                 <div className="space-y-3">
                   <button
                     className="btn btn-success btn-block bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
-                    onClick={handleGetQuote}
+                    // onClick={handleGetQuote}
                   >
                     🔍 Get Instant Quote
                   </button>
@@ -355,7 +390,9 @@ export default function PolicyDetails() {
                 <div className="space-y-2">
                   {policyData.durations.map((duration) => (
                     <label key={duration} className="cursor-pointer label">
-                      <span className="label-text text-green-800">{duration}</span>
+                      <span className="label-text text-green-800">
+                        {duration}
+                      </span>
                       <input
                         type="radio"
                         name="duration"
@@ -367,7 +404,9 @@ export default function PolicyDetails() {
                   ))}
                 </div>
                 <div className="alert alert-info mt-4 bg-gradient-to-r from-green-600 to-green-400">
-                  <span className="text-sm font-bold text-black">Selected: {selectedDuration}</span>
+                  <span className="text-sm font-bold text-black">
+                    Selected: {selectedDuration}
+                  </span>
                 </div>
               </div>
             </div>
@@ -413,14 +452,111 @@ export default function PolicyDetails() {
                   <div className="text-sm">📞 1800-123-4567</div>
                   <div className="text-sm">✉️ support@insurance.com</div>
                 </div>
-                <button className="btn btn-sm mt-4">
-                  Contact Support
-                </button>
+                <button className="btn btn-sm mt-4">Contact Support</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* show modal form here */}
+      <dialog id="my_modal_3" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-red-600 hover:bg-red-600 hover:text-white">
+              ✕
+            </button>
+          </form>
+          <h3 className="font-bold text-lg mb-4 text-center text-primary">
+            Get Your Insurance Quote
+          </h3>
+
+          <form className="space-y-3" onSubmit={handlePremiumEstimate}>
+            {/* Age */}
+            <div>
+              <label className="label">
+                <span className="label-text">Age</span>
+              </label>
+              <input
+                name="age"
+                type="number"
+                placeholder="Enter your age"
+                className="input input-bordered w-full"
+                min={18}
+              />
+            </div>
+
+            {/* Gender */}
+            <div>
+              <label className="label">
+                <span className="label-text">Gender</span>
+              </label>
+              <select className="select select-bordered w-full " name="gender">
+                <option disabled selected>
+                  Select Gender
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            {/* Coverage Amount */}
+            <div>
+              <label className="label">
+                <span className="label-text">Coverage Amount (৳)</span>
+              </label>
+              <input
+                name="coverageAmount"
+                type="number"
+                placeholder="e.g. 2000000"
+                className="input input-bordered w-full"
+              />
+            </div>
+
+            {/* Duration */}
+            <div>
+              <label className="label">
+                <span className="label-text">Duration</span>
+              </label>
+              <select className="select select-bordered w-full" name="duration">
+                <option disabled selected>
+                  Select Duration
+                </option>
+                {policyData.durations?.map((duration, index) => (
+                  <option value={duration} key={index}>
+                    {duration}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Smoker / Non-smoker */}
+            <div>
+              <label className="label">
+                <span className="label-text">Are you a smoker?</span>
+              </label>
+              <select className="select select-bordered w-full" name="smoker">
+                <option disabled selected>
+                  Select one
+                </option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            {/* Submit */}
+            <div className="modal-action">
+              <button type="submit" className="btn btn-primary w-full">
+                Estimate Premium
+              </button>
+            </div>
+          </form>
+          <h3 className="font-bold text-lg">Hello!</h3>
+          <p className="py-4">Press ESC key or click on ✕ button to close</p>
+        </div>
+      </dialog>
     </div>
   );
 }
