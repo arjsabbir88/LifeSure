@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData } from "react-router";
 
 // Sample policy data based on your database structure
 // const policyData = {
@@ -77,6 +77,8 @@ export default function PolicyDetails() {
   const [selectedDuration, setSelectedDuration] = useState(
     policyData.durations[0]
   );
+  const [estimatedPremiumAnnul, setEstimatedPremiumAnnul] = useState(0);
+  const [estimatedPremiumMonthly, setEstimatedPremiumMonthly] = useState(0);
 
   console.log("policyData.durations", policyData.durations);
 
@@ -127,18 +129,20 @@ export default function PolicyDetails() {
     // Duration Factor: 0.95 (if 20+ years for discount)
 
     const rateCoverage = 8;
-    const ageFactor = age >=40 ? 1.5 : 1;
-    const smokerFactor = smoker === 'yes'? 1.3 : 1;
-    const durationFactor = duration.includes('10') ? 0.95 : 1;
+    const ageFactor = age >= 40 ? 1.5 : 1;
+    const smokerFactor = smoker === "yes" ? 1.3 : 1;
+    const durationFactor = duration.includes("10") ? 0.95 : 1;
 
     // console.log(rateCoverage, ageFactor, smokerFactor, durationFactor)
 
-    const basePremium = (coverageAmount / 1000)* rateCoverage;
-    const estimatedPremiumAnnul = Math.ceil(basePremium * ageFactor* smokerFactor * durationFactor);
-    const estimatedPremiumMonthly = Math.ceil(estimatedPremiumAnnul / 12)
+    const basePremium = (coverageAmount / 1000) * rateCoverage;
+    const premiumAnnul =
+      basePremium * ageFactor * smokerFactor * durationFactor;
+    const premiumMonthly = Math.ceil(premiumAnnul / 12);
+    console.log(premiumAnnul, premiumMonthly);
 
-    console.log("Estimated premium: ", estimatedPremiumAnnul, estimatedPremiumMonthly);
-
+    setEstimatedPremiumAnnul(premiumAnnul);
+    setEstimatedPremiumMonthly(premiumMonthly);
   };
 
   return (
@@ -505,7 +509,7 @@ export default function PolicyDetails() {
             {/* Coverage Amount */}
             <div>
               <label className="label">
-                <span className="label-text">Coverage Amount (৳)</span>
+                <span className="label-text">Coverage Amount ($)</span>
               </label>
               <input
                 name="coverageAmount"
@@ -548,13 +552,15 @@ export default function PolicyDetails() {
 
             {/* Submit */}
             <div className="modal-action">
-              <button type="submit" className="btn btn-primary w-full">
-                Estimate Premium
-              </button>
+              <Link to="/user-form">
+                <button type="submit" className="btn btn-primary w-full">
+                  Estimate Premium
+                </button>
+              </Link>
             </div>
           </form>
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Press ESC key or click on ✕ button to close</p>
+          <h1>Estimated Annul Premium : ${estimatedPremiumAnnul}</h1>
+          <h1>Estimated Monthly Premium : ${estimatedPremiumMonthly}</h1>
         </div>
       </dialog>
     </div>
