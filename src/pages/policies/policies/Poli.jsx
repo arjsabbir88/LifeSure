@@ -24,6 +24,7 @@ export default function InsurancePolicies() {
     "term-life",
     "critical-illness",
     "disability",
+    "family"
   ];
 
   console.log("insurancePolicies", insurancePolicies);
