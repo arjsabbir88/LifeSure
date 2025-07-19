@@ -16,9 +16,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import { UserIcon, HeartIcon, ShieldIcon } from "lucide-react";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
-export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremiumAnnul,convertedData,bookingPolicyId}) {
-
+export default function DetailedUserForm({
+  estimatedPremiumMonthly,
+  estimatedPremiumAnnul,
+  convertedData,
+  bookingPolicyId,
+  closeModal,
+}) {
   const [formData, setFormData] = useState({
     // Personal Information
     firstName: "",
@@ -41,14 +49,14 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
 
     // Nominee Information
     nomineeInfo: {
-    nomineeFirstName: "",
-    nomineeLastName: "", 
-    nomineeEmail: "",
-    nomineePhone: "",
-    relationship: "",
-    nomineeDateOfBirth: "",
-    nomineeAddress: "",
-    nomineeOccupation: "",
+      nomineeFirstName: "",
+      nomineeLastName: "",
+      nomineeEmail: "",
+      nomineePhone: "",
+      relationship: "",
+      nomineeDateOfBirth: "",
+      nomineeAddress: "",
+      nomineeOccupation: "",
     },
 
     // Health Disclosure
@@ -60,6 +68,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
     exerciseFrequency: "",
     additionalHealthInfo: "",
   });
+  const axiosSecure = useAxiosSecure();
 
   // Premium data
   const annulPremium = estimatedPremiumAnnul;
@@ -98,13 +107,31 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
     }));
   };
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const bookingUserDetails={bookingPolicyId,...formData,convertedData,estimatedPremiumAnnul,estimatedPremiumMonthly,status:"pending"}
-    console.log("Form Data:", formData);
-    alert("Application submitted successfully!");
+    const form = e.target;
+    const bookingUserDetails = {
+      bookingPolicyId,
+      ...formData,
+      convertedData,
+      estimatedPremiumAnnul,
+      estimatedPremiumMonthly,
+      status: "pending",
+    };
+    // console.log("Form Data:", formData);
+
+    axiosSecure
+      .post("/booking-policy", bookingUserDetails)
+      .then((res) => {
+        console.log("Booking policy successfully", res.data);
+        if (res.data.insertedId) {
+          closeModal();
+          toast.success("Thanks for apply!! We will contact you as soon as possible")
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   const labelStyle = {
@@ -537,7 +564,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
               <div className="space-y-2">
                 <Label htmlFor="nomineeFirstName">Nominee First Name *</Label>
                 <Input
-                className="bg-white text-black"
+                  className="bg-white text-black"
                   id="nomineeFirstName"
                   value={formData.nomineeFirstName}
                   onChange={(e) =>
@@ -553,7 +580,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
               <div className="space-y-2">
                 <Label htmlFor="nomineeLastName">Nominee Last Name *</Label>
                 <Input
-                className="bg-white text-black"
+                  className="bg-white text-black"
                   id="nomineeLastName"
                   value={formData.nomineeLastName}
                   onChange={(e) =>
@@ -572,7 +599,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
               <div className="space-y-2">
                 <Label htmlFor="nomineeEmail">Nominee Email</Label>
                 <Input
-                className="bg-white text-black"
+                  className="bg-white text-black"
                   id="nomineeEmail"
                   type="email"
                   value={formData.nomineeEmail}
@@ -588,7 +615,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
               <div className="space-y-2">
                 <Label htmlFor="nomineePhone">Nominee Phone</Label>
                 <Input
-                className="bg-white text-black"
+                  className="bg-white text-black"
                   id="nomineePhone"
                   type="tel"
                   value={formData.nomineePhone}
@@ -642,7 +669,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
                   Nominee Date of Birth *
                 </Label>
                 <Input
-                className="bg-white text-black"
+                  className="bg-white text-black"
                   id="nomineeDateOfBirth"
                   type="date"
                   value={formData.nomineeDateOfBirth}
@@ -661,7 +688,6 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
               <div className="space-y-2">
                 <Label htmlFor="nomineeAddress">Nominee Address</Label>
                 <Textarea
-                
                   id="nomineeAddress"
                   value={formData.nomineeAddress}
                   onChange={(e) =>
@@ -854,7 +880,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
             <div className="space-y-2">
               <Label htmlFor="currentMedications">Current Medications</Label>
               <Textarea
-              className="bg-white text-black min-h-[80px]"
+                className="bg-white text-black min-h-[80px]"
                 id="currentMedications"
                 value={formData.currentMedications}
                 onChange={(e) =>
@@ -873,7 +899,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
               </Label>
               <Textarea
                 id="familyMedicalHistory"
-                 className="bg-white text-black min-h-[80px]"
+                className="bg-white text-black min-h-[80px]"
                 value={formData.familyMedicalHistory}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -891,7 +917,7 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
               </Label>
               <Textarea
                 id="additionalHealthInfo"
-                 className="bg-white text-black min-h-[80px]"
+                className="bg-white text-black min-h-[80px]"
                 value={formData.additionalHealthInfo}
                 onChange={(e) =>
                   setFormData((prev) => ({

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import DetailedUserForm from "./DetailsUserForm";
 
@@ -75,7 +75,7 @@ export default function PolicyDetails() {
   const policyData = useLoaderData() || [];
   const bookingPolicyId = policyData._id;
   console.log(bookingPolicyId);
-
+  const modalRef = useRef();
 
 
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -583,7 +583,7 @@ export default function PolicyDetails() {
         </div>
       </dialog>
 
-      <dialog id="my_modal_4" className="modal">
+      <dialog id="my_modal_4" ref={modalRef} className="modal">
         <div className="modal-box w-6xl min-h-screen max-w-none mx-auto">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
@@ -591,8 +591,7 @@ export default function PolicyDetails() {
               ✕
             </button>
           </form>
-          <h1>Hello</h1>
-          <DetailedUserForm convertedData={convertedData} estimatedPremiumAnnul={estimatedPremiumAnnul} estimatedPremiumMonthly={estimatedPremiumMonthly} bookingPolicyId={bookingPolicyId}/>
+          <DetailedUserForm convertedData={convertedData} estimatedPremiumAnnul={estimatedPremiumAnnul} estimatedPremiumMonthly={estimatedPremiumMonthly} bookingPolicyId={bookingPolicyId} closeModal={() => modalRef.current.close()}/>
         </div>
       </dialog>
     </div>
