@@ -1,40 +1,38 @@
-import React from "react";
-import logo from "../../assets/logo.svg";
+import { useState } from "react";
+import { Bell, Search, User, Home, Mail, Menu, X } from "lucide-react";
 import { Link, NavLink } from "react-router";
-import "animate.css";
-import Button from "../Custom/button/Button";
-import SecondButton from "../Custom/button/SecondButton";
+import logo from "../../assets/logo.svg";
 
-const NavBar = () => {
+export default function NavBar() {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const links = (
     <>
-      <NavLink
-        to="/"
-        className="flex items-center px-4 -mb-1 border-b-2 dark:border- "
-      >
-        Home
+      <NavLink to="/" className="flex items-center gap-1 hover:text-green-600">
+        <Home size={16} /> Home
       </NavLink>
       <NavLink
         to="/dashboard"
-        className="flex items-center px-4 -mb-1 border-b-2 dark:border- "
+        className="flex items-center gap-1 hover:text-green-600"
       >
         Dashboard{" "}
       </NavLink>
       <NavLink
         to="/policies"
-        className="flex items-center px-4 -mb-1 border-b-2 dark:border- "
+        className="flex items-center gap-1 hover:text-green-600"
       >
         Policies{" "}
       </NavLink>
       <NavLink
         to="/agents"
-        className="flex items-center px-4 -mb-1 border-b-2 dark:border- "
+        className="flex items-center gap-1 hover:text-green-600"
       >
         Agents{" "}
       </NavLink>
       <NavLink
         to="/faqs"
-        className="flex items-center px-4 -mb-1 border-b-2 dark:border-"
+        className="flex items-center gap-1 hover:text-green-600"
       >
         FAQs{" "}
       </NavLink>
@@ -42,13 +40,13 @@ const NavBar = () => {
   );
 
   return (
-    <div>
-      <header className="p-4 dark:bg-amber-100 dark:text-gray-800">
-        <div className="container flex justify-between h-12 mx-auto">
-          {/* logo here */}
+    <nav className="bg-white border-b shadow-sm px-4 md:px-6 py-3">
+      <div className="max-w-11/12 mx-auto">
+        <div className="flex justify-between items-center">
+          {/* Left: Brand */}
           <Link to="/">
             <div className="flex items-center cursor-pointer">
-              <div className="w-12 h-12 mr-3">
+              <div className="w-9 h-9 mr-3">
                 <img src={logo} alt="" />
               </div>
               <h1 className="text-2xl font-bold animate__animated animate__fadeInUp bg-gradient-to-r from-green-600 to-indigo-600 bg-clip-text text-transparent">
@@ -57,81 +55,78 @@ const NavBar = () => {
             </div>
           </Link>
 
-          {/* links here */}
-          <ul className="items-stretch hidden space-x-3 lg:flex">
-            {/* <li className="flex">
-              <a
-                rel="noopener noreferrer"
-                href="#"
-                className="flex items-center px-4 -mb-1 border-b-2 dark:border- dark:text-violet-600 dark:border-violet-600"
-              >
-                Link
-              </a>
-            </li>
-            <li className="flex">
-              <a
-                rel="noopener noreferrer"
-                href="#"
-                className="flex items-center px-4 -mb-1 border-b-2 dark:border-"
-              >
-                Link
-              </a>
-            </li>
-            <li className="flex">
-              <a
-                rel="noopener noreferrer"
-                href="#"
-                className="flex items-center px-4 -mb-1 border-b-2 dark:border-"
-              >
-                Link
-              </a>
-            </li>
-            <li className="flex">
-              <a
-                rel="noopener noreferrer"
-                href="#"
-                className="flex items-center px-4 -mb-1 border-b-2 dark:border-"
-              >
-                Link
-              </a>
-            </li> */}
+          {/* Center: Nav links (hidden on mobile) */}
+          <div className="hidden md:flex gap-6 text-sm font-medium text-gray-700">
             {links}
-          </ul>
-
-          {/* auth button */}
-          <div className="items-center flex-shrink-0 hidden lg:flex space-x-3">
-            {/* <button className="self-center px-8 py-3 rounded">Sign in</button> */}
-
-            {/* <button className="self-center px-8 py-3 font-semibold rounded dark:bg-[#059669] dark:text-gray-50">
-              Sign up
-            </button> */}
-            {/* <SecondButton path={`/auth/login`}/> */}
-            <Button path={`/auth/login`} text={`Login`}></Button>
-            <Button path={`/auth/register`} text={`Register`}></Button>
           </div>
 
-          {/* responsive button */}
+          {/* Right: Actions */}
+          <div className="flex items-center gap-3">
+            {/* Search bar (hidden on mobile) */}
+            <div className="relative hidden md:block">
+              <input
+                type="text"
+                placeholder="Search..."
+                className="pl-10 pr-4 py-1.5 border rounded-md text-sm bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <Search
+                size={16}
+                className="absolute left-3 top-2.5 text-gray-500"
+              />
+            </div>
 
-          <button className="p-4 lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-6 h-6 dark:text-gray-800"
+            {/* Bell */}
+            <div className="relative cursor-pointer">
+              <Bell className="text-gray-700" size={20} />
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full">
+                3
+              </span>
+            </div>
+
+            {/* Avatar */}
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 text-white flex items-center justify-center"
+              >
+                <User size={18} />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50 text-sm">
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+                    Profile
+                  </a>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+                    Settings
+                  </a>
+                  <hr />
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-red-500 hover:bg-red-50"
+                  >
+                    Sign Out
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* Hamburger menu (shown on mobile) */}
+            <button
+              className="md:hidden ml-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>
-            </svg>
-          </button>
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
-      </header>
-    </div>
-  );
-};
 
-export default NavBar;
+        {/* Mobile Nav Links */}
+        {mobileMenuOpen && (
+          <div className="mt-4 md:hidden flex flex-col gap-2 text-sm font-medium text-gray-700">
+            {links}
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+}
