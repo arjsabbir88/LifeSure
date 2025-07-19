@@ -159,7 +159,7 @@ export default function DetailedUserForm({
       <Card className="bg-amber-100">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <ShieldIcon className="h-5 w-5" />
+            <ShieldIcon className="h-5 w-5 text-gray-900" />
             Premium Information
           </CardTitle>
           <CardDescription>

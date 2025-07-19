@@ -27,7 +27,7 @@ export default function InsurancePolicies() {
     "family"
   ];
 
-  console.log("insurancePolicies", insurancePolicies);
+  // console.log("insurancePolicies", insurancePolicies);
 
   // Filter policies based on selected category
   const filteredPolicies = useMemo(() => {
@@ -67,7 +67,7 @@ export default function InsurancePolicies() {
       {/* Header */}
       <div className="bg-gradient-to-r from-green-600 to-green-400 text-primary-content py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-center text-black">
+          <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-900">
             Insurance Policies
           </h1>
           <p className="text-center text-lg opacity-90 text-gray-800">
