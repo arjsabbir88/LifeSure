@@ -17,7 +17,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import { UserIcon, HeartIcon, ShieldIcon } from "lucide-react";
 
-export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremiumAnnul,convertedData}) {
+export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremiumAnnul,convertedData,bookingPolicyId}) {
+
   const [formData, setFormData] = useState({
     // Personal Information
     firstName: "",
@@ -97,8 +98,11 @@ export default function DetailedUserForm({estimatedPremiumMonthly,estimatedPremi
     }));
   };
 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const bookingUserDetails={bookingPolicyId,...formData,convertedData,estimatedPremiumAnnul,estimatedPremiumMonthly,status:"pending"}
     console.log("Form Data:", formData);
     alert("Application submitted successfully!");
   };

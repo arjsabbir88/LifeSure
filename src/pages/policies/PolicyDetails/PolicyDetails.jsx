@@ -73,6 +73,10 @@ import DetailedUserForm from "./DetailsUserForm";
 
 export default function PolicyDetails() {
   const policyData = useLoaderData() || [];
+  const bookingPolicyId = policyData._id;
+  console.log(bookingPolicyId);
+
+
 
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState(
@@ -588,7 +592,7 @@ export default function PolicyDetails() {
             </button>
           </form>
           <h1>Hello</h1>
-          <DetailedUserForm convertedData={convertedData} estimatedPremiumAnnul={estimatedPremiumAnnul} estimatedPremiumMonthly={estimatedPremiumMonthly}/>
+          <DetailedUserForm convertedData={convertedData} estimatedPremiumAnnul={estimatedPremiumAnnul} estimatedPremiumMonthly={estimatedPremiumMonthly} bookingPolicyId={bookingPolicyId}/>
         </div>
       </dialog>
     </div>
