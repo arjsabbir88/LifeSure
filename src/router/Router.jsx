@@ -11,7 +11,6 @@ import Dashboard from "../dashboard/dashboard/Dashboard";
 import AdminDashboard from "../dashboard/admin/adminDashboard/AdminDashboard";
 import ManagePolicies from "../dashboard/admin/managePolicies/ManagePolicies";
 import AddPolicy from "../dashboard/admin/addPolicy/AddPolicy";
-import PremiumForm from "@/pages/policies/PolicyDetails/PremiumForm";
 
 export const Router = createBrowserRouter([
   {
@@ -32,10 +31,10 @@ export const Router = createBrowserRouter([
         Component: PolicyDetails,
         loader: ({ params }) => fetch(`http://localhost:3000/policies/${params.id}`)
       },
-      {
-        path: "/user-form",
-        Component: PremiumForm
-      },
+      // {
+      //   path: "/user-form",
+      //   Component: PremiumForm
+      // },
       {
         path: "/agents",
         Component: Agents,

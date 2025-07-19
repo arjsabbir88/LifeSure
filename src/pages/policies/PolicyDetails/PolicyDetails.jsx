@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link, useLoaderData } from "react-router";
+import DetailedUserForm from "./DetailsUserForm";
 
 // Sample policy data based on your database structure
 // const policyData = {
@@ -79,6 +80,7 @@ export default function PolicyDetails() {
   );
   const [estimatedPremiumAnnul, setEstimatedPremiumAnnul] = useState(0);
   const [estimatedPremiumMonthly, setEstimatedPremiumMonthly] = useState(0);
+  const [convertedData, setConvertedData] = useState({})
 
   console.log("policyData.durations", policyData.durations);
 
@@ -117,7 +119,8 @@ export default function PolicyDetails() {
     const form = e.target;
     const formData = new FormData(form);
     const convertedDataEstimate = Object.fromEntries(formData.entries());
-    // console.log("premium estimate data", convertedDataEstimate);
+    setConvertedData(convertedDataEstimate)
+    console.log("premium estimate data", convertedDataEstimate);
     const { age, coverageAmount, duration, smoker } = convertedDataEstimate;
 
     console.log(age, coverageAmount, duration, smoker);
@@ -143,6 +146,10 @@ export default function PolicyDetails() {
 
     setEstimatedPremiumAnnul(premiumAnnul);
     setEstimatedPremiumMonthly(premiumMonthly);
+
+    document.getElementById("my_modal_3").close();
+    form.reset();
+    document.getElementById("my_modal_4").showModal();
   };
 
   return (
@@ -488,6 +495,7 @@ export default function PolicyDetails() {
                 placeholder="Enter your age"
                 className="input input-bordered w-full"
                 min={18}
+                required
               />
             </div>
 
@@ -516,6 +524,7 @@ export default function PolicyDetails() {
                 type="number"
                 placeholder="e.g. 2000000"
                 className="input input-bordered w-full"
+                required
               />
             </div>
 
@@ -524,7 +533,11 @@ export default function PolicyDetails() {
               <label className="label">
                 <span className="label-text">Duration</span>
               </label>
-              <select className="select select-bordered w-full" name="duration">
+              <select
+                className="select select-bordered w-full"
+                name="duration"
+                required
+              >
                 <option disabled selected>
                   Select Duration
                 </option>
@@ -541,7 +554,11 @@ export default function PolicyDetails() {
               <label className="label">
                 <span className="label-text">Are you a smoker?</span>
               </label>
-              <select className="select select-bordered w-full" name="smoker">
+              <select
+                className="select select-bordered w-full"
+                name="smoker"
+                required
+              >
                 <option disabled selected>
                   Select one
                 </option>
@@ -552,15 +569,26 @@ export default function PolicyDetails() {
 
             {/* Submit */}
             <div className="modal-action">
-              <Link to="/user-form">
-                <button type="submit" className="btn btn-primary w-full">
-                  Estimate Premium
-                </button>
-              </Link>
+              <button type="submit" className="btn btn-primary w-full">
+                Estimate Premium
+              </button>
             </div>
           </form>
           <h1>Estimated Annul Premium : ${estimatedPremiumAnnul}</h1>
           <h1>Estimated Monthly Premium : ${estimatedPremiumMonthly}</h1>
+        </div>
+      </dialog>
+
+      <dialog id="my_modal_4" className="modal">
+        <div className="modal-box w-6xl min-h-screen max-w-none mx-auto">
+          <form method="dialog">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-red-600 hover:bg-red-600 hover:text-white">
+              ✕
+            </button>
+          </form>
+          <h1>Hello</h1>
+          <DetailedUserForm convertedData={convertedData} estimatedPremiumAnnul={estimatedPremiumAnnul} estimatedPremiumMonthly={estimatedPremiumMonthly}/>
         </div>
       </dialog>
     </div>
