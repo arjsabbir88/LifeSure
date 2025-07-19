@@ -51,8 +51,8 @@ const NavBar = () => {
               <div className="w-12 h-12 mr-3">
                 <img src={logo} alt="" />
               </div>
-              <h1 className="text-2xl font-bold animate__animated animate__fadeInUp ">
-                Life<span className="text-[#059669]">Sure</span>
+              <h1 className="text-2xl font-bold animate__animated animate__fadeInUp bg-gradient-to-r from-green-600 to-indigo-600 bg-clip-text text-transparent">
+                LifeSure
               </h1>
             </div>
           </Link>

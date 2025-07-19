@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import HeroSlider from "../../components/Custom/hero/heroSlider/HeroSlider";
 import axios from "axios";
 import MostPurchasedPolicies from "../mostPurchasedPolicies/MostPurchasedPolicies";
+import LifeSureBenefits from "../benefitsOfLifeSure/LifeSureBenefits";
 
 const Home = () => {
   const [mostPurchased, setMostPurchased] = useState([]);
@@ -20,6 +21,7 @@ const Home = () => {
       <div>
         <HeroSlider />
         <MostPurchasedPolicies mostPurchased={mostPurchased}/>
+        <LifeSureBenefits/>
       </div>
     </div>
   );

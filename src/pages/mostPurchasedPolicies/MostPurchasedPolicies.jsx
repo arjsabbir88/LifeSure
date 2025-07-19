@@ -53,6 +53,9 @@ const MostPurchasedPolicies = ({ mostPurchased }) => {
           </Link>
         ))}
       </div>
+      <div className="my-4 flex justify-center">
+        <Link className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black" to="/policies">See all policy</Link>
+      </div>
     </section>
   );
 };
