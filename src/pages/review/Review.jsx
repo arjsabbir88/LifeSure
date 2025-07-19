@@ -1,6 +1,7 @@
 import { use, useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "@/authProvider/AuthProvider";
+import { toast } from "sonner";
 
 const Review = () => {
   const { user, loading } = useContext(AuthContext);
@@ -10,14 +11,13 @@ const Review = () => {
     return <p>Loading......</p>;
   }
 
+  const [success, setSuccess] = useState(null);
   const [reviewData, setReviewData] = useState({
     name: displayName,
     image: photoURL,
     rating: "",
     message: "",
   });
-
-  const [success, setSuccess] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,20 +30,26 @@ const Review = () => {
     // Validation
     const { name, image, rating, message } = reviewData;
     if (!name || !image || !rating || !message) {
-      alert("Please fill in all fields.");
+      toast.error("Please fill in all fields.");
       return;
     }
 
     try {
-      const response = await axios.post("/reviews", {
+      const response = await axios.post("http://localhost:3000/reviews", {
         ...reviewData,
         createdAt: new Date(),
       });
-      setSuccess("Review submitted successfully!");
+      console.log(response.data);
+
+      toast.success("Thanks for submitting your review!");
+      setSuccess("Thanks for your review! It has been submitted successfully.");
       setReviewData({ name: "", image: "", rating: "", message: "" });
+
     } catch (error) {
+
       console.error("Error submitting review:", error);
-      setSuccess("Something went wrong. Try again!");
+      toast.error("Something went wrong! Please try again.");
+      setSuccess("Something went wrong! Try again later.");
     }
   };
 
@@ -70,7 +76,6 @@ const Review = () => {
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
               placeholder="John Doe"
-              readOnly
             />
           </div>
 
@@ -85,7 +90,7 @@ const Review = () => {
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
               placeholder="https://i.pravatar.cc/150?img=3"
-              readOnly
+            
             />
           </div>
 
