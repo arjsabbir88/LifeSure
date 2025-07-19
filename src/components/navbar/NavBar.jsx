@@ -1,11 +1,37 @@
-import { useState } from "react";
-import { Bell, Search, User, Home, Mail, Menu, X } from "lucide-react";
+import { useContext, useState } from "react";
+import {
+  Bell,
+  Search,
+  User,
+  Home,
+  Menu,
+  X,
+  LayoutDashboard,
+  Warehouse,
+  Users,
+  Lightbulb,
+  LogIn,
+  LogOut,
+} from "lucide-react";
 import { Link, NavLink } from "react-router";
 import logo from "../../assets/logo.svg";
+import { AuthContext } from "@/authProvider/AuthProvider";
+import { toast } from "sonner";
 
 export default function NavBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout } = useContext(AuthContext);
+  console.log(user)
+
+  const auth = (
+    <>
+      <Link className="btn btn-soft btn-success px-6 rounded-lg bg-gradient-to-r hover:from-green-600 hover:to-green-800 hover:text-white text-black" 
+      to="/auth/login">Sign In</Link>
+      <Link className="btn btn-soft btn-success px-6 rounded-lg bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black" 
+      to="/auth/register">Sign In</Link>
+    </>
+  );
 
   const links = (
     <>
@@ -16,28 +42,43 @@ export default function NavBar() {
         to="/dashboard"
         className="flex items-center gap-1 hover:text-green-600"
       >
+        <LayoutDashboard size={16} />
         Dashboard{" "}
       </NavLink>
       <NavLink
         to="/policies"
         className="flex items-center gap-1 hover:text-green-600"
       >
+        <Warehouse size={16} />
         Policies{" "}
       </NavLink>
       <NavLink
         to="/agents"
         className="flex items-center gap-1 hover:text-green-600"
       >
+        <Users size={16} />
         Agents{" "}
       </NavLink>
       <NavLink
         to="/faqs"
         className="flex items-center gap-1 hover:text-green-600"
       >
+        <Lightbulb size={16} />
         FAQs{" "}
       </NavLink>
     </>
   );
+
+
+  const handleLogOut =()=>{
+    logout()
+    .then((res)=>{
+      console.log("logout")
+      toast.success("User Logout Successfully");
+    }).catch(err=>{
+      toast.error(err.message);
+    })
+  }
 
   return (
     <nav className="bg-white border-b shadow-sm px-4 md:px-6 py-3">
@@ -84,31 +125,36 @@ export default function NavBar() {
             </div>
 
             {/* Avatar */}
-            <div className="relative">
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 text-white flex items-center justify-center"
-              >
-                <User size={18} />
-              </button>
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50 text-sm">
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                    Profile
-                  </a>
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                    Settings
-                  </a>
-                  <hr />
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-red-500 hover:bg-red-50"
-                  >
-                    Sign Out
-                  </a>
-                </div>
-              )}
-            </div>
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 text-white flex items-center justify-center hover:cursor-pointer"
+                >
+
+                  {user?.photoURL?<img className="h-8 w-8 rounded-full" src={user?.photoURL} alt="" /> : <User size={18} />}
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50 text-sm">
+                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+                      Profile
+                    </a>
+                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+                      Settings
+                    </a>
+                    <hr />
+                    <button
+                     onClick={handleLogOut}
+                      className="block px-4 py-2 text-red-500 hover:bg-red-50 w-full"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              auth 
+            )}
 
             {/* Hamburger menu (shown on mobile) */}
             <button
