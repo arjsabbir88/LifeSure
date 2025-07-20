@@ -13,6 +13,7 @@ import ManagePolicies from "../dashboard/admin/managePolicies/ManagePolicies";
 import AddPolicy from "../dashboard/admin/addPolicy/AddPolicy";
 import Review from "@/pages/review/Review";
 import PrivetRoute from "@/hooks/PrivetRoute";
+import AddBlogs from "@/dashboard/admin/addBlogs/AddBlogs";
 
 export const Router = createBrowserRouter([
   {
@@ -78,6 +79,10 @@ export const Router = createBrowserRouter([
               </PrivetRoute>
             ),
           },
+          {
+            path: "/dashboard/blogs",
+            Component: AddBlogs
+          }
         ],
       },
     ],
