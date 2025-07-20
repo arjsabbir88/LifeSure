@@ -3,6 +3,7 @@ import HeroSlider from "../../components/Custom/hero/heroSlider/HeroSlider";
 import axios from "axios";
 import MostPurchasedPolicies from "../mostPurchasedPolicies/MostPurchasedPolicies";
 import LifeSureBenefits from "../benefitsOfLifeSure/LifeSureBenefits";
+import ReviewSection from "../review/ReviewSection";
 
 const Home = () => {
   const [mostPurchased, setMostPurchased] = useState([]);
@@ -22,6 +23,7 @@ const Home = () => {
         <HeroSlider />
         <MostPurchasedPolicies mostPurchased={mostPurchased}/>
         <LifeSureBenefits/>
+        <ReviewSection></ReviewSection>
       </div>
     </div>
   );
