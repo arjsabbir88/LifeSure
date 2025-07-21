@@ -25,7 +25,7 @@ const NewsLetter = () => {
 
         {/* Additional content section */}
         <div className="mt-16 lg:mt-24 text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
             Join thousands of subscribers
           </h2>
           <p className="text-lg text-gray-600 mb-8">

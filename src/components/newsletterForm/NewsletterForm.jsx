@@ -55,7 +55,7 @@ export default function NewsletterForm() {
           Stay Updated
         </CardTitle>
         <CardDescription className="text-gray-600">
-          Subscribe to our newsletter and never miss our latest updates, tips, and exclusive content.
+          Subscribe to our LifeSure and never miss our latest updates, tips, and exclusive content.
         </CardDescription>
       </CardHeader>
 
@@ -132,7 +132,7 @@ export default function NewsletterForm() {
             </Button>
 
             <p className="text-xs text-gray-500 text-center">
-              By subscribing, you agree to receive our newsletter and promotional emails. You can unsubscribe at any
+              By subscribing, you agree to receive our LifeSure and promotional emails. You can unsubscribe at any
               time.
             </p>
           </form>
