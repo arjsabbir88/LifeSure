@@ -14,6 +14,8 @@ import AddPolicy from "../dashboard/admin/addPolicy/AddPolicy";
 import Review from "@/pages/review/Review";
 import PrivetRoute from "@/hooks/PrivetRoute";
 import AddBlogs from "@/dashboard/admin/addBlogs/AddBlogs";
+import LatestBlogsDetails from "@/pages/blogs/LatestBlogsDetails";
+import Blogs from "@/pages/blogs/Blogs";
 
 export const Router = createBrowserRouter([
   {
@@ -54,6 +56,17 @@ export const Router = createBrowserRouter([
       {
         path: "/auth/register",
         Component: Register,
+      },
+      {
+        path: "/blogs",
+        Component: Blogs
+      },
+      {
+        path: '/blogs/details/:id',
+        element: <PrivetRoute>
+          <LatestBlogsDetails></LatestBlogsDetails>
+        </PrivetRoute>,
+        loader: ({params})=> fetch(`http://localhost:3000/blogs/details/${params.id}`)
       },
       {
         path: "/dashboard",

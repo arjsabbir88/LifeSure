@@ -22,7 +22,7 @@ export default function NavBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
-  console.log(user)
+  // console.log(user)
 
   const auth = (
     <>
@@ -65,6 +65,13 @@ export default function NavBar() {
       >
         <Lightbulb size={16} />
         FAQs{" "}
+      </NavLink>
+      <NavLink
+        to="/blogs"
+        className="flex items-center gap-1 hover:text-green-600"
+      >
+        <Lightbulb size={16} />
+        Blogs{" "}
       </NavLink>
     </>
   );

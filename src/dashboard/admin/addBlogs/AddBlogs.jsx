@@ -1,53 +1,98 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UploadCloud } from "lucide-react";
 import { motion } from "framer-motion";
 import imgage from "./animated.gif";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { AuthContext } from "@/authProvider/AuthProvider";
+import { toast } from "sonner";
 
 const AddBlogs = () => {
+  const { user, loading } = useContext(AuthContext);
   const [imagePreview, setImagePreview] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     summary: "",
     content: "",
-    image: null,
   });
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
+  const axiosSecure = useAxiosSecure();
 
-    if (name === "image" && files[0]) {
-      setFormData({ ...formData, image: files[0] });
-      setImagePreview(URL.createObjectURL(files[0]));
-    } else {
-      setFormData({ ...formData, [name]: value });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const image = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", image);
+
+    try {
+      const response = await fetch(
+        "https://api.imgbb.com/1/upload?key=e5428105f9e1d68d8a0128f5badc4ce3",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log("Uploaded Image URL:", data.data.url);
+        setImagePreview(data.data.url);
+        setImageUrl(data.data.url);
+      } else {
+        console.error("Upload failed:", data);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const form = e.target;
 
-    const blogData = new FormData();
-    blogData.append("title", formData.title);
-    blogData.append("summary", formData.summary);
-    blogData.append("content", formData.content);
-    blogData.append("image", formData.image);
+    const blogData = {
+      ...formData,
+      image: imageUrl,
+      createdBy: user?.email,
+      createdAt: new Date().toISOString(),
+    };
 
-    try {
-      await fetch("http://localhost:3000/upload-blog", {
-        method: "POST",
-        body: blogData,
+    console.log(blogData);
+
+    axiosSecure
+      .post("/blogs", blogData)
+      .then((res) => {
+        if (res.data.insertedId) {
+          toast.success("Blogs Posted Successfully");
+          setFormData({
+            title: "",
+            summary: "",
+            content: "",
+          });
+          setImageUrl(null);
+          setImagePreview(null);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message)
+        toast.error(err.message)
       });
-
-      alert("Blog posted successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to post blog.");
-    }
   };
 
   return (
     <section className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto items-center bg-white p-6 shadow-lg rounded-2xl">
+      <div className="text-center mb-2">
+        <h2 className="text-2xl font-bold text-gray-800 text-center">
+          Post New Blog
+        </h2>
+        <p className="text-gray-600">Empowering you through knowledge</p>
+      </div>
+      <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto items-center bg-white  p-6 shadow-lg rounded-2xl">
         {/* Left Side - Animation/Image */}
         <motion.div
           initial={{ x: -50, opacity: 0 }}
@@ -78,17 +123,13 @@ const AddBlogs = () => {
           onSubmit={handleSubmit}
           className="space-y-4"
         >
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Post New Blog
-          </h2>
-
           <input
             type="text"
             name="title"
             placeholder="Blog Title"
             className="w-full border rounded-lg p-3 focus:outline-blue-500"
             value={formData.title}
-            onChange={handleChange}
+            onChange={handleInputChange}
             required
           />
 
@@ -98,14 +139,24 @@ const AddBlogs = () => {
             className="w-full border rounded-lg p-3 focus:outline-blue-500"
             rows={2}
             value={formData.summary}
-            onChange={handleChange}
+            onChange={handleInputChange}
+            required
+          />
+
+          <textarea
+            name="content"
+            placeholder="Write your blog content..."
+            className="w-full border rounded-lg p-3 focus:outline-blue-500"
+            rows={5}
+            value={formData.content}
+            onChange={handleInputChange}
             required
           />
 
           {/* Custom File Input */}
           <label className="w-full flex items-center justify-center gap-3 p-3 bg-blue-50 border border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100 transition">
-            <UploadCloud className="w-6 h-6 text-blue-600" />
-            <span className="text-sm text-blue-700 font-medium">
+            <UploadCloud className="w-6 h-6 text-green-600" />
+            <span className="text-sm text-green-700 font-medium">
               Choose Image
             </span>
             <input
@@ -113,7 +164,7 @@ const AddBlogs = () => {
               name="image"
               accept="image/*"
               className="hidden"
-              onChange={handleChange}
+              onChange={handlePhotoUpload}
               required
             />
           </label>
@@ -127,19 +178,9 @@ const AddBlogs = () => {
             />
           )}
 
-          <textarea
-            name="content"
-            placeholder="Write your blog content..."
-            className="w-full border rounded-lg p-3 focus:outline-blue-500"
-            rows={5}
-            value={formData.content}
-            onChange={handleChange}
-            required
-          />
-
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+            className="w-full py-3 rounded-lg bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 hover:cursor-pointer text-white font-semibold transition"
           >
             Publish Blog
           </button>
