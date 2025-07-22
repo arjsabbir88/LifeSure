@@ -59,11 +59,6 @@ export default function Profile() {
   const [isSaving, setIsSaving] = useState(false);
   const [imageURL, setImageURL] = useState(null);
 
-  const userUpdateInfo = {
-    displayName: tempName,
-    photoURL: imageURL,
-  };
-
   const handleNameEdit = () => {
     setTempName(isUser?.displayName);
     setIsEditingName(true);
@@ -76,10 +71,7 @@ export default function Profile() {
     setIsEditingName(false);
     setIsSaving(false);
 
-    toast({
-      title: "Profile Updated",
-      description: "Your name has been successfully updated.",
-    });
+   toast.success("Profile Updated successfully");
   };
   console.log(isUser?.displayName);
 

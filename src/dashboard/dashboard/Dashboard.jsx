@@ -47,6 +47,9 @@ const Dashboard = () => {
           <li>
             <Link to="/dashboard/blogs">Add Blog</Link>
           </li>
+          <li>
+            <Link to="/dashboard/my-policy">My Policy</Link>
+          </li>
         </ul>
       </div>
     </div>

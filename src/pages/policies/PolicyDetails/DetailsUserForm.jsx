@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +19,7 @@ import { UserIcon, HeartIcon, ShieldIcon } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { AuthContext } from "@/authProvider/AuthProvider";
 
 export default function DetailedUserForm({
   estimatedPremiumMonthly,
@@ -27,6 +28,8 @@ export default function DetailedUserForm({
   bookingPolicyId,
   closeModal,
 }) {
+
+  const {user} = useContext(AuthContext)
   const [formData, setFormData] = useState({
     // Personal Information
     firstName: "",
@@ -116,6 +119,7 @@ export default function DetailedUserForm({
       convertedData,
       estimatedPremiumAnnul,
       estimatedPremiumMonthly,
+      userEmail: user?.email,
       status: "pending",
     };
     // console.log("Form Data:", formData);
