@@ -37,10 +37,6 @@ export const Router = createBrowserRouter([
         loader: ({ params }) =>
           fetch(`http://localhost:3000/policies/${params.id}`),
       },
-      // {
-      //   path: "/user-form",
-      //   Component: PremiumForm
-      // },
       {
         path: "/agents",
         Component: Agents,

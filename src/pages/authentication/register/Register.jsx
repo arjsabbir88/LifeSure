@@ -10,17 +10,21 @@ import {
   ArrowRight,
   Github,
   Chrome,
+  UploadCloud,
 } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../../authProvider/AuthProvider";
+import useAxios from "@/hooks/useAxios";
 
 export default function Register() {
-  const { user, createUser, loginWithGoogle, updateUser, setUser, loading } =
+  const { user, createUser, loginWithGoogle, updateUserProfile, setUser, loading } =
     useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,7 +34,41 @@ export default function Register() {
     agreeToTerms: false,
   });
 
+  const navigate = useNavigate();
+    const from = location.state?.from || '/';
+
   const [errors, setErrors] = useState({});
+
+  const axiosInstance = useAxios();
+
+  const handlePhotoUpload = async (e) => {
+    const image = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", image);
+
+    try {
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_PHOTOUPLOADE_KEY
+        }`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await response.json();
+
+      if (data.success) {
+        console.log("Uploaded Image URL:", data.data.url);
+        setImagePreview(data.data.url);
+        setImageUrl(data.data.url);
+      } else {
+        console.error("Upload failed:", data);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -70,8 +108,34 @@ export default function Register() {
 
     // call createUser function here
     createUser(formData.email, formData.password)
-      .then((res) => {
+      .then(async (res) => {
         console.log("user created successfully", res);
+
+        const userInfo = {
+          email: formData.email,
+          photoURL: imageUrl,
+          role: "Customer",
+          created_at: new Date().toISOString(),
+          last_log_in: new Date().toISOString(),
+        };
+
+        const userRes = await axiosInstance.post("/user-info", userInfo);
+        console.log(userRes);
+
+        const userProfile = {
+          displayName: formData.firstName + formData.lastName,
+          photoURL: imageUrl,
+        };
+
+        updateUserProfile(userProfile)
+          .then(() => {
+            console.log("profile name pic updated");
+            navigate(from);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
         setFormData({
           firstName: "",
           lastName: "",
@@ -284,6 +348,31 @@ export default function Register() {
                 </label>
               )}
             </div>
+            <div>
+              <label className="w-full flex items-center justify-center gap-3 p-3 bg-blue-50 border border-dashed border-blue-300 rounded-lg cursor-pointer hover:bg-blue-100 transition">
+                <UploadCloud className="w-6 h-6 text-green-600" />
+                <span className="text-sm text-green-700 font-medium">
+                  Choose Image
+                </span>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handlePhotoUpload}
+                  required
+                />
+              </label>
+
+              {/* Preview Image */}
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded-md shadow-md"
+                />
+              )}
+            </div>
 
             {/* Terms Agreement */}
             <div className="form-control">
@@ -296,6 +385,7 @@ export default function Register() {
                   className={`checkbox checkbox-primary checkbox-sm mr-3 ${
                     errors.agreeToTerms ? "checkbox-error" : ""
                   }`}
+                  required
                 />
                 <span className="label-text text-sm text-gray-600">
                   I agree to the{" "}

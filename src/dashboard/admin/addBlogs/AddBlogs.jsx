@@ -16,6 +16,7 @@ const AddBlogs = () => {
     content: "",
   });
 
+  // console.log(import.meta.env.VITE_PHOTOUPLOADE_KEY)
   const axiosSecure = useAxiosSecure();
 
   const handleInputChange = (e) => {
@@ -30,13 +31,13 @@ const AddBlogs = () => {
 
     try {
       const response = await fetch(
-        "https://api.imgbb.com/1/upload?key=e5428105f9e1d68d8a0128f5badc4ce3",
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_PHOTOUPLOADE_KEY}`,
         {
           method: "POST",
           body: formData,
         }
       );
-
+// e5428105f9e1d68d8a0128f5badc4ce3
       const data = await response.json();
 
       if (data.success) {
