@@ -16,6 +16,7 @@ import PrivetRoute from "@/hooks/PrivetRoute";
 import AddBlogs from "@/dashboard/admin/addBlogs/AddBlogs";
 import LatestBlogsDetails from "@/pages/blogs/LatestBlogsDetails";
 import Blogs from "@/pages/blogs/Blogs";
+import Profile from "@/pages/profile/Profile";
 
 export const Router = createBrowserRouter([
   {
@@ -63,6 +64,12 @@ export const Router = createBrowserRouter([
           <LatestBlogsDetails></LatestBlogsDetails>
         </PrivetRoute>,
         loader: ({params})=> fetch(`http://localhost:3000/blogs/details/${params.id}`)
+      },
+      {
+        path: '/profile',
+        element: <PrivetRoute>
+          <Profile></Profile>
+        </PrivetRoute>
       },
       {
         path: "/dashboard",

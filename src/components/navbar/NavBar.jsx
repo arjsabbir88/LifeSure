@@ -143,9 +143,9 @@ export default function NavBar() {
                 </button>
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50 text-sm">
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">
                       Profile
-                    </a>
+                    </Link>
                     <a href="#" className="block px-4 py-2 hover:bg-gray-100">
                       Settings
                     </a>
