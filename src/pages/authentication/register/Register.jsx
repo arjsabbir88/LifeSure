@@ -15,10 +15,18 @@ import {
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../../authProvider/AuthProvider";
 import useAxios from "@/hooks/useAxios";
+import { toast } from "sonner";
 
 export default function Register() {
-  const { user, createUser, loginWithGoogle, updateUserProfile, setUser, loading } =
-    useContext(AuthContext);
+  const {
+    user,
+    createUser,
+    googleSignIn,
+    updateUserProfile,
+    setUser,
+    loading,
+    setLoading
+  } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -34,8 +42,13 @@ export default function Register() {
     agreeToTerms: false,
   });
 
+  const capitalize = (str) => {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const navigate = useNavigate();
-    const from = location.state?.from || '/';
+  const from = location.state?.from || "/";
 
   const [errors, setErrors] = useState({});
 
@@ -113,7 +126,7 @@ export default function Register() {
 
         const userInfo = {
           email: formData.email,
-          photoURL: imageUrl,
+          profilePic: imageUrl,
           role: "Customer",
           created_at: new Date().toISOString(),
           last_log_in: new Date().toISOString(),
@@ -123,14 +136,13 @@ export default function Register() {
         console.log(userRes);
 
         const userProfile = {
-          displayName: formData.firstName + formData.lastName,
+          displayName: capitalize(formData.firstName) + "" +formData.lastName,
           photoURL: imageUrl,
         };
 
         updateUserProfile(userProfile)
           .then(() => {
             console.log("profile name pic updated");
-            navigate(from);
           })
           .catch((error) => {
             console.log(error);
@@ -144,11 +156,43 @@ export default function Register() {
           confirmPassword: "",
           agreeToTerms: false,
         });
+        toast.success("User Created Successfully");
+        navigate(from);
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err.message);
       });
   };
+
+  // handle google signIn
+  const loginWithGoogle = () => {
+  googleSignIn()
+    .then(async (res) => {
+      const user = res.user; // this is important
+
+      const userInfo = {
+        profilePic: user.photoURL,
+        role: "Customer", // default role, backend may override
+      };
+
+      // ✅ Call backend with PUT and upsert logic
+      const userRes = await axiosInstance.put(`/users/${user.email}`, userInfo);
+
+      console.log("User login or updated:", userRes.data);
+
+      toast.success("Login Successfully");
+      console.log("Google login successful", user);
+      setLoading(false);
+      navigate(from || "/");
+    })
+    .catch((err) => {
+      console.error("Google login failed", err.message);
+      toast.error(err.message);
+      setLoading(false);
+    });
+};
+
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -436,7 +480,10 @@ export default function Register() {
               <Github className="w-4 h-4 mr-2" />
               GitHub
             </button>
-            <button className="btn btn-outline h-12 hover:bg-gray-50 transition-all duration-300 transform hover:scale-[1.02]">
+            <button
+              onClick={loginWithGoogle}
+              className="btn btn-outline h-12 hover:bg-gray-50 transition-all duration-300 transform hover:scale-[1.02]"
+            >
               <Chrome className="w-4 h-4 mr-2" />
               Google
             </button>
@@ -452,7 +499,7 @@ export default function Register() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes blob {
           0% {
             transform: translate(0px, 0px) scale(1);
