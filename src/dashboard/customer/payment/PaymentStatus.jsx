@@ -65,7 +65,7 @@ export default function PaymentStatus() {
   const { user } = useContext(AuthContext);
   console.log(user?.email);
 
-  const { isPanding, data: activePolicy = [] } = useQuery({
+  const { isPanding, data: activePolicy = [] ,refetch} = useQuery({
     queryKey: ["my-policy", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -114,7 +114,7 @@ export default function PaymentStatus() {
               </TableHeader>
               <TableBody>
                 {activePolicy.map((policy) => (
-                  <StatusTableCell key={policy._id} policy={policy}></StatusTableCell>
+                  <StatusTableCell key={policy._id} policy={policy} refetch={refetch}></StatusTableCell>
                 ))}
               </TableBody>
             </Table>

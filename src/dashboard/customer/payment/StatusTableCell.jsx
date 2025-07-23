@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import PayNowModal from "./PayNowModal";
 
 const getStatusBadge = (status) => {
   switch (status) {
@@ -51,7 +52,35 @@ const formatDate = (dateString) => {
   });
 };
 
-const StatusTableCell = ({ policy }) => {
+const StatusTableCell = ({ policy ,refetch}) => {
+  const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+
+
+
+  const handleConfirmPayment = async () => {
+  try {
+    // const res = await axiosSecure.post("/create-checkout-session", {
+    //   email: user.email,
+    //   amount: selectedPolicy.policyDetails.premiumAmount,
+    //   bookingPolicyId: selectedPolicy._id,
+    // });
+
+    const stripe = await stripePromise;
+    stripe.redirectToCheckout({ sessionId: res.data.id });
+  } catch (err) {
+    console.error("Payment error", err);
+  }
+};
+
+
+  const handlePayNow = (policyId) => {
+    const found = policyId;
+    setSelectedPolicy(found);
+    setModalOpen(true);
+  };
+
   console.log(policy);
   return (
     <TableRow key={policy._id} className="hover:bg-muted/50">
@@ -89,7 +118,7 @@ const StatusTableCell = ({ policy }) => {
           ) : (
             <Button
               size="sm"
-              onClick={() => handlePayNow(policy.policyDetails._id)}
+              onClick={() => handlePayNow(policy)}
               className={
                 policy?.paymentStatus === "Due"
                   ? "bg-green-600 hover:bg-green-700"
@@ -127,6 +156,14 @@ const StatusTableCell = ({ policy }) => {
           </DropdownMenu>
         </div>
       </TableCell>
+
+      <PayNowModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleConfirmPayment}
+        policy={selectedPolicy}
+        refetch={refetch}
+      />
     </TableRow>
   );
 };
