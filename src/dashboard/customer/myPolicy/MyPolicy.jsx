@@ -5,6 +5,8 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useContext } from "react";
 import { AuthContext } from "@/authProvider/AuthProvider";
 import { useQuery } from '@tanstack/react-query'
+import { Link } from "react-router";
+import Loader from "@/components/Custom/loader/Loader";
 
 const statusColor = {
   Approved: "bg-green-500",
@@ -22,7 +24,7 @@ const rowVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-const myPolicy = ({ policies, onReview, onView }) => {
+const myPolicy = () => {
 
     const {user} = useContext(AuthContext);
 
@@ -37,8 +39,9 @@ const myPolicy = ({ policies, onReview, onView }) => {
         }
     })
 
-    // console.log(data)
-
+    if(isPanding){
+        return <Loader></Loader>
+    }
 
   return (
     <motion.div
@@ -60,9 +63,9 @@ const myPolicy = ({ policies, onReview, onView }) => {
 
         <tbody>
           <AnimatePresence>
-            {myPolicy.map((policy) => (
+            {myPolicy.map((policy,index) => (
               <motion.tr
-                key={myPolicy._id}
+                key={index}
                 variants={rowVariants}
                 exit={{ opacity: 0, y: -10 }}
                 className="hover:bg-gray-50 border-b transition"
@@ -76,11 +79,11 @@ const myPolicy = ({ policies, onReview, onView }) => {
                   </Badge>
                 </td>
                 <td className="px-4 py-3">{policy?.convertedData?.duration} years</td>
-                <td className="px-4 py-3">${policy.policyDetails?.basePremium }</td>
+                <td className="px-4 py-3">${policy.policyDetails?.basePremium } Monthly</td>
                 <td className="px-4 py-3 flex gap-2 justify-end">
-                  <Button size="sm" onClick={() => onView(policy)}>
-                    View
-                  </Button>
+                  <Link to={`/policiesDetails/${policy.bookingPolicyId}`} size="sm" className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
+                    View details
+                  </Link>
                   <Button
                     size="sm"
                     variant="outline"

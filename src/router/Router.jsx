@@ -18,6 +18,7 @@ import LatestBlogsDetails from "@/pages/blogs/LatestBlogsDetails";
 import Blogs from "@/pages/blogs/Blogs";
 import Profile from "@/pages/profile/Profile";
 import myPolicy from "@/dashboard/customer/myPolicy/MyPolicy";
+import ClaimRequest from "@/dashboard/customer/claimRequest/ClaimRequest";
 
 export const Router = createBrowserRouter([
   {
@@ -111,6 +112,10 @@ export const Router = createBrowserRouter([
           {
             path: '/dashboard/my-policy',
             Component: myPolicy
+          },
+          {
+            path: '/dashboard/claim-request',
+            Component: ClaimRequest
           }
 
         ],

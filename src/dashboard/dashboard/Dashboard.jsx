@@ -50,6 +50,9 @@ const Dashboard = () => {
           <li>
             <Link to="/dashboard/my-policy">My Policy</Link>
           </li>
+          <li>
+            <Link to="/dashboard/claim-request">Claim Request</Link>
+          </li>
         </ul>
       </div>
     </div>
