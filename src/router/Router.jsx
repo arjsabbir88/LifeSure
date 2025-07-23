@@ -19,6 +19,7 @@ import Blogs from "@/pages/blogs/Blogs";
 import Profile from "@/pages/profile/Profile";
 import myPolicy from "@/dashboard/customer/myPolicy/MyPolicy";
 import ClaimRequest from "@/dashboard/customer/claimRequest/ClaimRequest";
+import PaymentStatus from "@/dashboard/customer/payment/PaymentStatus";
 
 export const Router = createBrowserRouter([
   {
@@ -116,8 +117,11 @@ export const Router = createBrowserRouter([
           {
             path: '/dashboard/claim-request',
             Component: ClaimRequest
+          },
+          {
+            path: '/dashboard/payment-status',
+            Component: PaymentStatus
           }
-
         ],
       },
     ],

@@ -8,9 +8,9 @@ import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 import { FileText, FileUp, Send } from "lucide-react";
 import Loader from "@/components/Custom/loader/Loader";
+import { toast } from "sonner";
 
 function ClaimRequest() {
-  // policy object props থেকে নিবে, policy.status active কিনা চেক করো
 
   const [selectedPolicy, setSelectedPolicy] = useState("");
   const [reason, setReason] = useState("");
@@ -46,6 +46,17 @@ const handleSubmit = (e) => {
 
     console.log("📨 Submitted Claim Request:", formData);
     // You can use axiosSecure.post('/claim-submit', formData) here
+
+    axiosSecure.post('/policy-claim-request', formData)
+    .then((res)=>{
+      console.log(res.data)
+      if(res.data.insertedId){
+        toast.success('Claim Request Sended Successfully!!')
+      }
+    }).catch(err=>{
+      console.log(err);
+      toast.error(err.message);
+    })
   };
 
 

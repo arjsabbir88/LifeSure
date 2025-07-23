@@ -53,6 +53,9 @@ const Dashboard = () => {
           <li>
             <Link to="/dashboard/claim-request">Claim Request</Link>
           </li>
+          <li>
+            <Link to='/dashboard/payment-status'>Payment Status</Link>
+          </li>
         </ul>
       </div>
     </div>
