@@ -52,6 +52,8 @@ const handleSubmit = (e) => {
       console.log(res.data)
       if(res.data.insertedId){
         toast.success('Claim Request Sended Successfully!!')
+        setReason('');
+        setSelectedPolicy('')
       }
     }).catch(err=>{
       console.log(err);
