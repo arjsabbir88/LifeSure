@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 export default function ManageUser() {
   const [filter, setFilter] = useState("all");
@@ -35,20 +36,36 @@ export default function ManageUser() {
   const handlePromote = async (_id, role) => {
     try {
       await axiosSecure.patch(`/users/promote/${_id}`, { role });
-      toast.success(`Your role now ${role}`)
+      toast.success(`Your role now ${role}`);
       refetch();
     } catch (err) {
       console.error("Promotion failed", err);
     }
   };
 
-  const handleDelete = async (_id) => {
-    try {
-      await axiosSecure.delete(`/users/${_id}`);
-      refetch();
-    } catch (err) {
-      console.error("Delete failed", err);
-    }
+  const handleDelete = (_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await axiosSecure.delete(`/users/${_id}`);
+          if (res.data.success) {
+            Swal.fire("Deleted!", "The user has been deleted.", "success");
+            refetch();
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire("Error", "Failed to delete user", "error");
+        }
+      }
+    });
   };
 
   const filteredUsers = users.filter((userRole) =>
@@ -104,7 +121,9 @@ export default function ManageUser() {
                       {user.name}
                     </td>
                     <td className="px-4 py-3 text-sm">{user.email}</td>
-                    <td className="px-4 py-3 text-sm capitalize">{user.role}</td>
+                    <td className="px-4 py-3 text-sm capitalize">
+                      {user.role}
+                    </td>
                     <td className="px-4 py-3 text-sm">
                       {new Date(user.created_at).toLocaleDateString()}
                     </td>
@@ -143,7 +162,9 @@ export default function ManageUser() {
                           )}
                           {user.role.toLowerCase() !== "customer" && (
                             <DropdownMenuItem
-                              onClick={() => handlePromote(user._id, "customer")}
+                              onClick={() =>
+                                handlePromote(user._id, "customer")
+                              }
                             >
                               Make Customer
                             </DropdownMenuItem>
