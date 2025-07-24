@@ -1,21 +1,30 @@
-import { useContext, useEffect, useState } from "react";
-import { ArrowUpRight, ArrowDownLeft, Trash2 } from "lucide-react";
+import { useState } from "react";
+import {
+  ArrowUpRight,
+  ArrowDownLeft,
+  Trash2,
+  UserPlus2,
+  MoreVertical,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
-import { AuthContext } from "@/authProvider/AuthProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 export default function ManageUser() {
   const [filter, setFilter] = useState("all");
   const axiosSecure = useAxiosSecure();
-  const {user} = useContext(AuthContext)
-  const userAuthInfo = user;
-  console.log(userAuthInfo)
 
-  const { data: users = [] } = useQuery({
+  const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get("/users-info");
@@ -23,42 +32,27 @@ export default function ManageUser() {
     },
   });
 
-  console.log(users);
-  const handlePromote = async (id) => {
+  const handlePromote = async (_id, role) => {
     try {
-      await axios.patch(`/api/users/promote/${id}`);
-      setUsers((prev) =>
-        prev.map((user) => (user.id === id ? { ...user, role: "agent" } : user))
-      );
+      await axiosSecure.patch(`/users/promote/${_id}`, { role });
+      toast.success(`Your role now ${role}`)
+      refetch();
     } catch (err) {
       console.error("Promotion failed", err);
     }
   };
 
-  const handleDemote = async (id) => {
+  const handleDelete = async (_id) => {
     try {
-      await axios.patch(`/api/users/demote/${id}`);
-      setUsers((prev) =>
-        prev.map((user) =>
-          user.id === id ? { ...user, role: "customer" } : user
-        )
-      );
-    } catch (err) {
-      console.error("Demotion failed", err);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`/api/users/${id}`);
-      setUsers((prev) => prev.filter((user) => user.id !== id));
+      await axiosSecure.delete(`/users/${_id}`);
+      refetch();
     } catch (err) {
       console.error("Delete failed", err);
     }
   };
 
   const filteredUsers = users.filter((userRole) =>
-    filter === "all" ? true : userRole.role === filter
+    filter === "all" ? true : userRole.role.toLowerCase() === filter
   );
 
   return (
@@ -69,30 +63,16 @@ export default function ManageUser() {
       </div>
 
       <div className="flex justify-end mb-4 gap-2">
-        <Button
-          variant={filter === "all" ? "default" : "outline"}
-          onClick={() => setFilter("all")}
-        >
-          All
-        </Button>
-        <Button
-          variant={filter === "customer" ? "default" : "outline"}
-          onClick={() => setFilter("customer")}
-        >
-          Customer
-        </Button>
-        <Button
-          variant={filter === "agent" ? "default" : "outline"}
-          onClick={() => setFilter("agent")}
-        >
-          Agent
-        </Button>
-        <Button
-          variant={filter === "admin" ? "default" : "outline"}
-          onClick={() => setFilter("admin")}
-        >
-          Admin
-        </Button>
+        {["all", "customer", "agent", "admin"].map((role) => (
+          <Button
+            key={role}
+            variant={filter === role ? "default" : "outline"}
+            onClick={() => setFilter(role)}
+            className="capitalize"
+          >
+            {role}
+          </Button>
+        ))}
       </div>
 
       <motion.div
@@ -114,41 +94,62 @@ export default function ManageUser() {
               </thead>
               <tbody>
                 {filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-green-50">
-                    <td className="px-4 py-3 text-sm">{user.name}</td>
-                    <td className="px-4 py-3 text-sm">{user.email}</td>
-                    <td className="px-4 py-3 text-sm capitalize">
-                      {user.role}
+                  <tr key={user._id} className="hover:bg-green-50">
+                    <td className="px-4 py-3 text-sm flex items-center gap-2">
+                      <img
+                        src={user.profilePic}
+                        alt={user.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                      {user.name}
                     </td>
+                    <td className="px-4 py-3 text-sm">{user.email}</td>
+                    <td className="px-4 py-3 text-sm capitalize">{user.role}</td>
                     <td className="px-4 py-3 text-sm">
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      {new Date(user.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3 flex gap-2 items-center flex-wrap">
-                      {user.role === "customer" && (
-                        <Button
-                          size="sm"
-                          onClick={() => handlePromote(user.id)}
-                          className="bg-green-600 hover:bg-green-700 text-white"
-                        >
-                          <ArrowUpRight className="w-4 h-4 mr-1" /> Promote
-                        </Button>
-                      )}
-                      {user.role === "agent" && (
-                        <Button
-                          size="sm"
-                          onClick={() => handleDemote(user.id)}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white"
-                        >
-                          <ArrowDownLeft className="w-4 h-4 mr-1" /> Demote
-                        </Button>
-                      )}
                       <Button
                         size="sm"
                         variant="destructive"
-                        onClick={() => handleDelete(user.id)}
+                        onClick={() => handleDelete(user._id)}
                       >
                         <Trash2 className="w-4 h-4 mr-1" /> Delete
                       </Button>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            size="sm"
+                            className="bg-emerald-500 hover:bg-emerald-600 text-white capitalize"
+                          >
+                            {user.role}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          {user.role.toLowerCase() !== "admin" && (
+                            <DropdownMenuItem
+                              onClick={() => handlePromote(user._id, "admin")}
+                            >
+                              Make Admin
+                            </DropdownMenuItem>
+                          )}
+                          {user.role.toLowerCase() !== "agent" && (
+                            <DropdownMenuItem
+                              onClick={() => handlePromote(user._id, "agent")}
+                            >
+                              Make Agent
+                            </DropdownMenuItem>
+                          )}
+                          {user.role.toLowerCase() !== "customer" && (
+                            <DropdownMenuItem
+                              onClick={() => handlePromote(user._id, "customer")}
+                            >
+                              Make Customer
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 ))}
