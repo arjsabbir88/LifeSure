@@ -114,7 +114,7 @@ export default function PaymentStatus() {
               </TableHeader>
               <TableBody>
                 {activePolicy.map((policy) => (
-                  <StatusTableCell key={policy._id} policy={policy} refetch={refetch}></StatusTableCell>
+                  <StatusTableCell key={policy._id} policy={policy}></StatusTableCell>
                 ))}
               </TableBody>
             </Table>

@@ -52,7 +52,7 @@ const formatDate = (dateString) => {
   });
 };
 
-const StatusTableCell = ({ policy ,refetch}) => {
+const StatusTableCell = ({ policy}) => {
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -162,7 +162,6 @@ const StatusTableCell = ({ policy ,refetch}) => {
         onClose={() => setModalOpen(false)}
         onConfirm={handleConfirmPayment}
         policy={selectedPolicy}
-        refetch={refetch}
       />
     </TableRow>
   );

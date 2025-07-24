@@ -28,8 +28,7 @@ export default function DetailedUserForm({
   bookingPolicyId,
   closeModal,
 }) {
-
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     // Personal Information
     firstName: "",
@@ -51,16 +50,15 @@ export default function DetailedUserForm({
     employerName: "",
 
     // Nominee Information
-    nomineeInfo: {
-      nomineeFirstName: "",
-      nomineeLastName: "",
-      nomineeEmail: "",
-      nomineePhone: "",
-      relationship: "",
-      nomineeDateOfBirth: "",
-      nomineeAddress: "",
-      nomineeOccupation: "",
-    },
+
+    nomineeFirstName: "",
+    nomineeLastName: "",
+    nomineeEmail: "",
+    nomineePhone: "",
+    relationship: "",
+    nomineeDateOfBirth: "",
+    nomineeAddress: "",
+    nomineeOccupation: "",
 
     // Health Disclosure
     healthConditions: [],
@@ -130,7 +128,9 @@ export default function DetailedUserForm({
         console.log("Booking policy successfully", res.data);
         if (res.data.insertedId) {
           closeModal();
-          toast.success("Thanks for apply!! We will contact you as soon as possible")
+          toast.success(
+            "Thanks for apply!! We will contact you as soon as possible"
+          );
         }
       })
       .catch((err) => {

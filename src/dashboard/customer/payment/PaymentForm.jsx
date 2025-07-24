@@ -7,7 +7,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AuthContext } from "@/authProvider/AuthProvider";
 import { toast } from "sonner";
 
-const PaymentForm = ({ policy, refetch }) => {
+const PaymentForm = ({ policy }) => {
   console.log(policy);
   const stripe = useStripe();
   const elements = useElements();
@@ -101,7 +101,6 @@ const PaymentForm = ({ policy, refetch }) => {
           //  Show SweetAlert with transaction ID
 
           toast.success("Payment Successfull!!");
-          refetch();
 
           //  Redirect to /my polices
           navigate("/dashboard");

@@ -18,7 +18,7 @@ export default function PayNowModal({ open, onClose, onConfirm, policy,refetch})
           <p><strong>Status:</strong> {policy?.paymentStatus}</p>
         </div>
         <div>
-            <PaymentCard policy={policy} refetch={refetch}></PaymentCard>
+            <PaymentCard policy={policy}></PaymentCard>
         </div>
         {/* <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>

@@ -1,8 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import DetailedUserForm from "./DetailsUserForm";
+import { useQuery } from "@tanstack/react-query";
+import { AuthContext } from "@/authProvider/AuthProvider";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import Loader from "@/components/Custom/loader/Loader";
 
 // Sample policy data based on your database structure
 // const policyData = {
@@ -72,11 +76,31 @@ import DetailedUserForm from "./DetailsUserForm";
 // }
 
 export default function PolicyDetails() {
+  const axiosSecure = useAxiosSecure();
+  const { user, loading } = useContext(AuthContext);
   const policyData = useLoaderData() || [];
   const bookingPolicyId = policyData._id;
   console.log(bookingPolicyId);
   const modalRef = useRef();
 
+  console.log(bookingPolicyId);
+
+  const {
+    isLoading,
+    data: isBooked = false,
+    isError,
+  } = useQuery({
+    queryKey: ["bookingPolicyId", bookingPolicyId],
+    enabled: !!bookingPolicyId,
+    queryFn: async () => {
+      const res = await axiosSecure(
+        `/check-policy-available?bookingId=${bookingPolicyId}&email=${user.email}`
+      );
+      return res.data;
+    },
+  });
+
+  console.log("booked policy or not", isBooked);
 
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState(
@@ -84,14 +108,12 @@ export default function PolicyDetails() {
   );
   const [estimatedPremiumAnnul, setEstimatedPremiumAnnul] = useState(0);
   const [estimatedPremiumMonthly, setEstimatedPremiumMonthly] = useState(0);
-  const [convertedData, setConvertedData] = useState({})
+  const [convertedData, setConvertedData] = useState({});
 
   console.log("policyData.durations", policyData.durations);
 
   // const handleGetQuote = () => {
-  //   // Redirect to quote page
   //   console.log("Redirecting to quote page...");
-  //   // window.location.href = "/quote"
   // };
 
   const handleBookConsultation = () => {
@@ -123,7 +145,7 @@ export default function PolicyDetails() {
     const form = e.target;
     const formData = new FormData(form);
     const convertedDataEstimate = Object.fromEntries(formData.entries());
-    setConvertedData(convertedDataEstimate)
+    setConvertedData(convertedDataEstimate);
     console.log("premium estimate data", convertedDataEstimate);
     const { age, coverageAmount, duration, smoker } = convertedDataEstimate;
 
@@ -156,6 +178,10 @@ export default function PolicyDetails() {
     document.getElementById("my_modal_4").showModal();
   };
 
+  if (isLoading || loading) {
+    return <Loader />;
+  }
+
   return (
     <div className="min-h-screen bg-green-100">
       {/* Hero Section */}
@@ -172,14 +198,27 @@ export default function PolicyDetails() {
               {policyData.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                className="btn btn-soft btn-lg hover:scale-105 transition-transform hover:bg-transparent hover:text-green-800"
-                onClick={() =>
-                  document.getElementById("my_modal_3").showModal()
-                }
-              >
-                Get Quote Now
-              </button>
+              {isBooked ? (
+                <button
+                  className="btn btn-soft btn-lg hover:scale-105 transition-transform hover:text-green-800 opacity-50 text-white bg-amber-50"
+                  onClick={() =>
+                    document.getElementById("my_modal_3").showModal()
+                  }
+                  disabled={isBooked}
+                >
+                  Policy Booked
+                </button>
+              ) : (
+                <button
+                  className="btn btn-soft btn-lg hover:scale-105 transition-transform hover:bg-transparent hover:text-green-800"
+                  onClick={() =>
+                    document.getElementById("my_modal_3").showModal()
+                  }
+                >
+                  Get Quote Now
+                </button>
+              )}
+
               <button
                 className="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-green-800 hover:scale-105 transition-all"
                 onClick={handleBookConsultation}
@@ -591,7 +630,13 @@ export default function PolicyDetails() {
               ✕
             </button>
           </form>
-          <DetailedUserForm convertedData={convertedData} estimatedPremiumAnnul={estimatedPremiumAnnul} estimatedPremiumMonthly={estimatedPremiumMonthly} bookingPolicyId={bookingPolicyId} closeModal={() => modalRef.current.close()}/>
+          <DetailedUserForm
+            convertedData={convertedData}
+            estimatedPremiumAnnul={estimatedPremiumAnnul}
+            estimatedPremiumMonthly={estimatedPremiumMonthly}
+            bookingPolicyId={bookingPolicyId}
+            closeModal={() => modalRef.current.close()}
+          />
         </div>
       </dialog>
     </div>

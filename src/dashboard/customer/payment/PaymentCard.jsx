@@ -11,7 +11,7 @@ const PaymentCard = ({policy,refetch}) => {
     <div>
       <title>Payment Card</title>
       <Elements stripe={stripePromise}>
-        <PaymentForm policy={policy}refetch={refetch}></PaymentForm>
+        <PaymentForm policy={policy}></PaymentForm>
       </Elements>
     </div>
   )
