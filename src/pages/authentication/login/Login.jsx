@@ -60,6 +60,7 @@ export default function Login() {
       const userInfo = {
         profilePic: user.photoURL,
         role: "Customer",
+        name: user.displayName
       };
 
       // ✅ Call backend with PUT and upsert logic

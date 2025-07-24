@@ -29,7 +29,7 @@ const Dashboard = () => {
             <Link> Manage Applications</Link>
           </li>
           <li>
-            <Link>Manage Users</Link>
+            <Link to="/dashboard/manage-user">Manage Users</Link>
           </li>
 
           <li>

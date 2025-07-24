@@ -130,9 +130,10 @@ export default function Register() {
           role: "Customer",
           created_at: new Date().toISOString(),
           last_log_in: new Date().toISOString(),
+          name: capitalize(formData.firstName) + "" +formData.lastName,
         };
 
-        const userRes = await axiosInstance.post("/user-info", userInfo);
+        const userRes = await axiosInstance.post("/user-info-created", userInfo);
         console.log(userRes);
 
         const userProfile = {
@@ -169,11 +170,12 @@ export default function Register() {
   const loginWithGoogle = () => {
   googleSignIn()
     .then(async (res) => {
-      const user = res.user; // this is important
+      const user = res.user;
 
       const userInfo = {
         profilePic: user.photoURL,
         role: "Customer", // default role, backend may override
+        name: user.displayName
       };
 
       // ✅ Call backend with PUT and upsert logic
