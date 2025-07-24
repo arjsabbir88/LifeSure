@@ -65,7 +65,7 @@ const handleSubmit = (e) => {
   return (
      <div className="max-w-6xl mx-auto flex justify-center items-center h-[100vh]">
         <motion.div
-      className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6 p-6 rounded-xl shadow-xl bg-white"
+      className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6 p-6 rounded-xl shadow-xl bg-[#f0fdf4]"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

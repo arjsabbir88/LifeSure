@@ -113,7 +113,7 @@ const PaymentForm = ({ policy }) => {
     <div>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mx-auto border border-gray-200"
+        className="space-y-6 bg-[#f0fdf4] p-8 rounded-2xl shadow-lg w-full max-w-md mx-auto border border-gray-200"
       >
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white">
           Complete Your Payment

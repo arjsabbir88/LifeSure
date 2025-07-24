@@ -87,7 +87,7 @@ export default function PaymentStatus() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 bg-[#f0fdf4]">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Payment Status</CardTitle>

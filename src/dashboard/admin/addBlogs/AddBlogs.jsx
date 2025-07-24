@@ -86,7 +86,7 @@ const AddBlogs = () => {
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 py-12 px-4">
+    <section className="min-h-screen bg-[#f0fdf4] py-12 px-4">
       <div className="text-center mb-2">
         <h2 className="text-2xl font-bold text-gray-800 text-center">
           Post New Blog

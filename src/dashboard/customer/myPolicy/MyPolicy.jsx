@@ -48,7 +48,7 @@ const myPolicy = () => {
       initial="hidden"
       animate="visible"
       variants={tableVariants}
-      className="overflow-x-auto rounded-xl border shadow-sm bg-white"
+      className="overflow-x-auto rounded-xl border shadow-sm bg-[#f0fdf4]"
     >
       <table className="w-full text-sm text-left table-auto border-collapse">
         <thead className="bg-gray-100 text-gray-700 uppercase font-medium">
@@ -84,13 +84,12 @@ const myPolicy = () => {
                   <Link to={`/policiesDetails/${policy.bookingPolicyId}`} size="sm" className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
                     View details
                   </Link>
-                  <Button
+                  <Link to='/dashboard/review'
                     size="sm"
                     variant="outline"
-                    onClick={() => onReview(policy)}
                   >
                     Review
-                  </Button>
+                  </Link>
                 </td>
               </motion.tr>
             ))}
