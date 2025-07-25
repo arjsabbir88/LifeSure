@@ -36,7 +36,7 @@ const Dashboard = () => {
             <Link to="admin/dashboard/manage-policies">Manage Policies</Link>
           </li>
           <li>
-            <Link>Manage Transactions</Link>
+            <Link to="/dashboard/manage-transactions">Manage Transactions</Link>
           </li>
           <li>
             <Link> Manage Agents</Link>

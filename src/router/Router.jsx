@@ -21,6 +21,7 @@ import myPolicy from "@/dashboard/customer/myPolicy/MyPolicy";
 import ClaimRequest from "@/dashboard/customer/claimRequest/ClaimRequest";
 import PaymentStatus from "@/dashboard/customer/payment/PaymentStatus";
 import ManageUser from "@/dashboard/admin/manageUser/ManageUser";
+import ManageTransactions from "@/dashboard/admin/manageTransactions/ManageTransactions";
 
 export const Router = createBrowserRouter([
   {
@@ -97,6 +98,10 @@ export const Router = createBrowserRouter([
           {
             path: "/dashboard/manage-user",
             Component: ManageUser
+          },
+          {
+            path: "/dashboard/manage-transactions",
+            Component: ManageTransactions
           },
           {
             path: "/dashboard/review",

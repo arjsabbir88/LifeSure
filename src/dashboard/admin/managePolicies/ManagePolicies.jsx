@@ -9,6 +9,7 @@ import { Link } from "react-router";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import EditPolicyModal from "./EditPolicyModal";
 import { toast } from "sonner";
+import Loader from "@/components/Custom/loader/Loader";
 
 // const fetchPolicies = async () => {
 //   const res = await axios.get("/policies");
@@ -93,7 +94,7 @@ const ManagePolicies = () => {
       </div>
 
       {isLoading ? (
-        <p>Loading...</p>
+        <Loader></Loader>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border rounded-xl shadow-sm">
