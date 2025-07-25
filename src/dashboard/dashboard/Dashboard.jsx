@@ -53,6 +53,12 @@ const Dashboard = () => {
           <li>
             <Link to='/dashboard/payment-status'>Payment Status</Link>
           </li>
+          <li>
+            <Link to='/dashboard/assigned-customers'>Assigned Customer</Link>
+          </li>
+          <li>
+            <Link to='/dashboard/manage-blogs'>Manage Blogs</Link>
+          </li>
         </ul>
       </div>
     </div>

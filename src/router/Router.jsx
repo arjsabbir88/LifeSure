@@ -26,6 +26,8 @@ import ManageApplications from "@/dashboard/admin/manageApplication/ManageApplic
 import AgentApplicationForm from "@/pages/agents/CreateAgentForm";
 import ApplicationDetails from "@/dashboard/admin/manageApplication/ApplicationDetails";
 import ManageAgents from "@/dashboard/admin/manageAgent/ManageAgents";
+import AssignedCustomers from "@/dashboard/agent/assignedCustomer/AssignedCustomers";
+import ManageBlogs from "@/dashboard/agent/manageBlogs/ManageBlogs";
 
 export const Router = createBrowserRouter([
   {
@@ -134,6 +136,16 @@ export const Router = createBrowserRouter([
           {
             path: '/dashboard/agents',
             Component: ManageAgents
+          },
+
+          // agent dashboard
+          {
+            path: '/dashboard/assigned-customers',
+            Component: AssignedCustomers,
+          },
+          {
+            path: '/dashboard/manage-blogs',
+            Component: ManageBlogs
           },
 
 
