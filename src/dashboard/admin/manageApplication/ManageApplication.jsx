@@ -35,13 +35,15 @@ const ManageApplications = () => {
   });
 
   const updateStatus = useMutation({
-    mutationFn: ({ id, status,adminFeedback }) =>
-      axiosSecure.patch(`/update-status/${id}`, { status,adminFeedback }),
+    mutationFn: ({ id, status, adminFeedback }) =>
+      axiosSecure.patch(`/update-status/${id}`, { status, adminFeedback }),
     onSuccess: () => {
       queryClient.invalidateQueries(["applications"]);
       Swal.fire("Success!", "Status updated successfully", "success");
     },
   });
+
+  //   update status
 
   const handleStatusChange = async (id, status) => {
     if (status === "rejected") {
@@ -75,11 +77,41 @@ const ManageApplications = () => {
     }
   };
 
-  // const assignAgent = useMutation({
-  //   mutationFn: ({ id, agent }) =>
-  //     axiosSecure.patch(`/applications/${id}`, { agent }),
-  //   onSuccess: () => queryClient.invalidateQueries(["applications"]),
-  // });
+  //   assigned agent
+
+  const assignAgent = useMutation({
+    mutationFn: ({ id, assignedAgent }) =>
+      axiosSecure.patch(`/assign-agent/${id}`, { assignedAgent }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["applications"]);
+      Swal.fire("Success!", "Policy assigned successfully", "success");
+    },
+  });
+
+  const handleAssignAgent = async (id, agentId) => {
+    console.log(id,agentId)
+    const agent = agents.find((a) => a._id === agentId);
+    if (!agent) return;
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: `Assign policy to ${agent.fullName}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, assign!",
+    });
+
+    if (result.isConfirmed) {
+      assignAgent.mutate({
+        id,
+        assignedAgent: {
+          agentId: agent._id,
+          name: agent.fullName,
+          email: agent.email,
+        },
+      });
+    }
+  };
 
   const handleView = (app) => {
     setSelectedApp(app);
@@ -148,34 +180,18 @@ const ManageApplications = () => {
                         className="text-sm border px-2 py-1 rounded"
                         defaultValue=""
                         onChange={(e) =>
-                          assignAgent.mutate({
-                            id: app._id,
-                            agent: e.target.value,
-                          })
+                          handleAssignAgent(app._id, e.target.value)
                         }
                       >
                         <option value="" disabled>
                           Assign Agent
                         </option>
                         {agents.map((agent) => (
-                          <option key={agent._id} value={agent.name}>
+                          <option key={agent._id} value={agent._id}>
                             {agent.fullName}
                           </option>
                         ))}
                       </select>
-
-                      <button
-                        onClick={() =>
-                          updateStatus.mutate({
-                            id: app._id,
-                            status: "Rejected",
-                          })
-                        }
-                        className="text-red-600 hover:underline"
-                      >
-                        <XCircle size={18} />
-                      </button>
-
                       <button
                         onClick={() => handleView(app)}
                         className="text-blue-600 hover:underline"
