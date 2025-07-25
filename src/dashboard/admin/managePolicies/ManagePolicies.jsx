@@ -1,17 +1,3 @@
-// import React from 'react'
-// import { Link } from 'react-router'
-
-// const ManagePolicies = () => {
-//   return (
-//     <div>
-//       this is manage policies page
-//       <Link to= 'add-policy'
-//       className='btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black'>Add Policy</Link>
-//     </div>
-//   )
-// }
-
-// export default ManagePolicies
 
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -22,6 +8,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import EditPolicyModal from "./EditPolicyModal";
+import { toast } from "sonner";
 
 // const fetchPolicies = async () => {
 //   const res = await axios.get("/policies");
@@ -60,7 +47,7 @@ const ManagePolicies = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`/api/policies/${id}`);
+        await axiosSecure.delete(`/policies/${id}`);
         Swal.fire("Deleted!", "Policy has been deleted.", "success");
         refetch();
       } catch (error) {
@@ -71,20 +58,19 @@ const ManagePolicies = () => {
 
   const handleEdit = (policy) => {
     setSelectedPolicy(policy);
-    // open edit modal here
     setModalOpen(true);
   };
 
   // handle update API
   const handleUpdate = async (id, updatedData) => {
-    console.log("thisis form handleUpdate function", id, updatedData);
-    try {
-      // await axios.put(`/api/policies/${id}`, updatedData);
-      Swal.fire("Updated!", "Policy has been updated.", "success");
-      refetch();
-    } catch (err) {
-      Swal.fire("Error", "Failed to update.", "error");
-    }
+    await axiosSecure.patch(`/policies/${id}`, updatedData)
+    .then((res)=>{
+      toast.success("Policy updated successfully")
+      refetch()
+    }).catch(err=>{
+      console.log(err)
+      toast.error("Failed to update policy. Please try again.")
+    })
   };
 
   return (
@@ -139,8 +125,8 @@ const ManagePolicies = () => {
                     />
                   </td>
                   <td className="p-3 font-medium">{policy.policyTitle}</td>
-                  <td className="p-3">৳{policy.coverageRange}</td>
-                  <td className="p-3">৳{policy.basePremium}</td>
+                  <td className="p-3">${policy.coverageRange}</td>
+                  <td className="p-3">${policy.basePremium}</td>
                   <td className="p-3">
                     {policy.minAge} - {policy.maximumAge}
                   </td>
