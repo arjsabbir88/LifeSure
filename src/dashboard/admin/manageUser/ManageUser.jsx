@@ -85,7 +85,7 @@ export default function ManageUser() {
             key={role}
             variant={filter === role ? "default" : "outline"}
             onClick={() => setFilter(role)}
-            className="capitalize"
+            className="capitalize text-white hover:cursor-pointer bg-[#009966] focus:bg-transparent focus:border focus:text-black"
           >
             {role}
           </Button>

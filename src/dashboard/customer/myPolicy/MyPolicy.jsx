@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useContext } from "react";
 import { AuthContext } from "@/authProvider/AuthProvider";
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import Loader from "@/components/Custom/loader/Loader";
 
@@ -25,33 +25,36 @@ const rowVariants = {
 };
 
 const myPolicy = () => {
+  const { user } = useContext(AuthContext);
 
-    const {user} = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure();
 
-    const axiosSecure = useAxiosSecure()
+  const { isPanding, data: myPolicy = [] } = useQuery({
+    queryKey: ["my-policy", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/my-policy?email=${user?.email}`);
+      return res.data;
+    },
+  });
 
-    const {isPanding, data: myPolicy =[]} = useQuery({
-        queryKey: ['my-policy', user?.email],
-        enabled: !!user?.email,
-        queryFn: async ()=>{
-            const res = await axiosSecure.get(`/my-policy?email=${user?.email}`)
-            return res.data;
-        }
-    })
-
-    if(isPanding){
-        return <Loader></Loader>
-    }
+  if (isPanding) {
+    return <Loader></Loader>;
+  }
 
   return (
     <motion.div
       initial="hidden"
       animate="visible"
       variants={tableVariants}
-      className="overflow-x-auto rounded-xl border shadow-sm bg-[#f0fdf4]"
+      className="overflow-x-auto"
     >
-      <table className="w-full text-sm text-left table-auto border-collapse">
-        <thead className="bg-gray-100 text-gray-700 uppercase font-medium">
+      <div className="text-center my-10">
+        <h1 className="text-3xl font-bold text-green-950">Policies</h1>
+        <p className="text-gray-400">Manage and organize all your insurance plans in one place.</p>
+      </div>
+      <table className="max-w-6xl mx-auto w-full text-sm text-left table-auto border-collapse rounded-xl outline-2 bg-white shadow-xl">
+        <thead className="bg-green-300 text-gray-700 uppercase font-medium">
           <tr>
             <th className="px-4 py-3">Policy Name</th>
             <th className="px-4 py-3">Status</th>
@@ -63,7 +66,7 @@ const myPolicy = () => {
 
         <tbody>
           <AnimatePresence>
-            {myPolicy.map((policy,index) => (
+            {myPolicy.map((policy, index) => (
               <motion.tr
                 key={index}
                 variants={rowVariants}
@@ -78,22 +81,32 @@ const myPolicy = () => {
                     {policy.status}
                   </Badge>
                 </td>
-                <td className="px-4 py-3">{policy?.convertedData?.duration} years</td>
-                <td className="px-4 py-3">${policy.policyDetails?.basePremium } Monthly</td>
+                <td className="px-4 py-3">
+                  {policy?.convertedData?.duration} years
+                </td>
+                <td className="px-4 py-3">
+                  ${policy.policyDetails?.basePremium} Monthly
+                </td>
                 <td className="px-4 py-3 flex gap-2 justify-end">
-                  <Link to={`/policiesDetails/${policy.bookingPolicyId}`} size="sm" className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
+                  <Link
+                    to={`/policiesDetails/${policy.bookingPolicyId}`}
+                    size="sm"
+                    className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
+                  >
                     View details
                   </Link>
-                  <Link to='/dashboard/review'
+                  <Link
+                    to="/dashboard/review"
                     size="sm"
                     variant="outline"
+                    className="btn btn-soft btn-success bg-gradient-to-r hover:from-green-400 hover:to-green-600 text-black hover:text-white"
                   >
                     Review
                   </Link>
                 </td>
               </motion.tr>
             ))}
-          </AnimatePresence> 
+          </AnimatePresence>
         </tbody>
       </table>
     </motion.div>
