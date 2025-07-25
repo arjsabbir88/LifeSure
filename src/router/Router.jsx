@@ -22,6 +22,9 @@ import ClaimRequest from "@/dashboard/customer/claimRequest/ClaimRequest";
 import PaymentStatus from "@/dashboard/customer/payment/PaymentStatus";
 import ManageUser from "@/dashboard/admin/manageUser/ManageUser";
 import ManageTransactions from "@/dashboard/admin/manageTransactions/ManageTransactions";
+import ManageApplications from "@/dashboard/admin/manageApplication/ManageApplication";
+import AgentApplicationForm from "@/pages/agents/CreateAgentForm";
+import ApplicationDetails from "@/dashboard/admin/manageApplication/ApplicationDetails";
 
 export const Router = createBrowserRouter([
   {
@@ -46,6 +49,10 @@ export const Router = createBrowserRouter([
       {
         path: "/agents",
         Component: Agents,
+      },
+      {
+        path: '/agent-application',
+        Component: AgentApplicationForm
       },
       {
         path: "/faqs",
@@ -86,6 +93,14 @@ export const Router = createBrowserRouter([
           {
             index: true,
             Component: AdminDashboard,
+          },
+          {
+            path: '/dashboard/manage-application',
+            Component: ManageApplications
+          },
+          {
+            path: '/dashboard/manage-application/:id',
+            Component: ApplicationDetails
           },
           {
             path: "admin/dashboard/manage-policies",

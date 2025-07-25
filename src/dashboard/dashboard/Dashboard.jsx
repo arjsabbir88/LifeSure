@@ -26,7 +26,7 @@ const Dashboard = () => {
         <ul className="menu bg-green-300 text-base-content min-h-full w-80 p-4">
           {/* Sidebar content here */}
           <li>
-            <Link> Manage Applications</Link>
+            <Link to='/dashboard/manage-application'> Manage Applications</Link>
           </li>
           <li>
             <Link to="/dashboard/manage-user">Manage Users</Link>

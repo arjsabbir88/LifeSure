@@ -1,0 +1,142 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useContext, useState } from "react";
+import { Eye, XCircle} from "lucide-react";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
+
+
+const ManageApplications = () => {
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+
+  const [selectedApp, setSelectedApp] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate()
+
+  const { data: applications = [], isLoading } = useQuery({
+    queryKey: ["applications"],
+    queryFn: async () => {
+      console.log("application");
+      const res = await axiosSecure.get("/booking-with-policy");
+      return res.data;
+    },
+  });
+
+
+  console.log(applications)
+  console.log(applications);
+
+  const { data: agents = [] } = useQuery({
+    queryKey: ["agents"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/agents");
+      return res.data;
+    },
+  });
+
+  // const updateStatus = useMutation({
+  //   mutationFn: ({ id, status }) =>
+  //     axiosSecure.patch(`/applications/${id}`, { status }),
+  //   onSuccess: () => queryClient.invalidateQueries(["applications"]),
+  // });
+
+  // const assignAgent = useMutation({
+  //   mutationFn: ({ id, agent }) =>
+  //     axiosSecure.patch(`/applications/${id}`, { agent }),
+  //   onSuccess: () => queryClient.invalidateQueries(["applications"]),
+  // });
+
+  const handleView = (app) => {
+    setSelectedApp(app);
+    navigate(`/dashboard/manage-application/${app._id}?bookingId=${app.bookingPolicyId}&email=${app.email}`)
+  };
+
+  return (
+    <div className="p-6 space-y-6 overflow-auto">
+      <h2 className="text-2xl font-bold text-green-900">
+        🧾 Manage Applications
+      </h2>
+
+      {isLoading ? (
+        <p>Loading applications...</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full border rounded shadow-sm">
+            <thead className="bg-green-800 text-white">
+              <tr>
+                <th className="p-2">Name</th>
+                <th className="p-2">Email</th>
+                <th className="p-2">Policy</th>
+                <th className="p-2">Date</th>
+                <th className="p-2">Status</th>
+                <th className="p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {applications.map((app) => {
+                const createdAt = app.date
+                  ? new Date(app.date)
+                  : new Date(parseInt(app._id.substring(0, 8), 16) * 1000);
+
+                return (
+                  <tr key={app._id} className="border-b hover:bg-green-50">
+                    <td className="p-2">{`${app.firstName} ${app.lastName}`}</td>
+                    <td className="p-2">{app.email}</td>
+                    <td className="p-2">{app.policyData.policyTitle}</td>
+                    <td className="p-2">{createdAt.toLocaleDateString()}</td>
+                    <td className="p-2 font-semibold text-green-700">
+                      {app.status}
+                    </td>
+                    <td className="p-2 space-x-2">
+                      <select
+                        className="text-sm border px-2 py-1 rounded"
+                        defaultValue=""
+                        onChange={(e) =>
+                          assignAgent.mutate({
+                            id: app._id,
+                            agent: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="" disabled>
+                          Assign Agent
+                        </option>
+                        {agents.map((agent) => (
+                          <option key={agent._id} value={agent.name}>
+                            {agent.fullName}
+                          </option>
+                        ))}
+                      </select>
+
+                      <button
+                        onClick={() =>
+                          updateStatus.mutate({
+                            id: app._id,
+                            status: "Rejected",
+                          })
+                        }
+                        className="text-red-600 hover:underline"
+                      >
+                        <XCircle size={18} />
+                      </button>
+
+                      <button
+                        onClick={() => handleView(app)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        <Eye size={18} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ManageApplications;
