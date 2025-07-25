@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext, useState } from "react";
-import { Eye, XCircle} from "lucide-react";
+import { Eye, XCircle } from "lucide-react";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { useNavigate } from "react-router";
-
+import Swal from "sweetalert2";
 
 const ManageApplications = () => {
   const axiosSecure = useAxiosSecure();
@@ -12,7 +12,7 @@ const ManageApplications = () => {
   const [selectedApp, setSelectedApp] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ["applications"],
@@ -23,8 +23,7 @@ const ManageApplications = () => {
     },
   });
 
-
-  console.log(applications)
+  console.log(applications);
   console.log(applications);
 
   const { data: agents = [] } = useQuery({
@@ -35,11 +34,46 @@ const ManageApplications = () => {
     },
   });
 
-  // const updateStatus = useMutation({
-  //   mutationFn: ({ id, status }) =>
-  //     axiosSecure.patch(`/applications/${id}`, { status }),
-  //   onSuccess: () => queryClient.invalidateQueries(["applications"]),
-  // });
+  const updateStatus = useMutation({
+    mutationFn: ({ id, status,adminFeedback }) =>
+      axiosSecure.patch(`/update-status/${id}`, { status,adminFeedback }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["applications"]);
+      Swal.fire("Success!", "Status updated successfully", "success");
+    },
+  });
+
+  const handleStatusChange = async (id, status) => {
+    if (status === "rejected") {
+      const { value: feedback } = await Swal.fire({
+        title: "Provide Feedback",
+        input: "textarea",
+        inputLabel: "Rejection Reason",
+        inputPlaceholder: "Write your feedback here...",
+        inputAttributes: {
+          "aria-label": "Type your feedback",
+        },
+        showCancelButton: true,
+        confirmButtonText: "Submit",
+      });
+
+      if (feedback) {
+        updateStatus.mutate({ id, status, adminFeedback: feedback });
+      }
+    } else {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: `Change status to ${status}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, change it!",
+      });
+
+      if (result.isConfirmed) {
+        updateStatus.mutate({ id, status });
+      }
+    }
+  };
 
   // const assignAgent = useMutation({
   //   mutationFn: ({ id, agent }) =>
@@ -49,7 +83,9 @@ const ManageApplications = () => {
 
   const handleView = (app) => {
     setSelectedApp(app);
-    navigate(`/dashboard/manage-application/${app._id}?bookingId=${app.bookingPolicyId}&email=${app.email}`)
+    navigate(
+      `/dashboard/manage-application/${app._id}?bookingId=${app.bookingPolicyId}&email=${app.email}`
+    );
   };
 
   return (
@@ -86,7 +122,26 @@ const ManageApplications = () => {
                     <td className="p-2">{app.policyData.policyTitle}</td>
                     <td className="p-2">{createdAt.toLocaleDateString()}</td>
                     <td className="p-2 font-semibold text-green-700">
-                      {app.status}
+                      {app.status.toLowerCase() === "pending" ? (
+                        <select
+                          defaultValue={app.status.toLowerCase()}
+                          className="text-sm border px-2 py-1 rounded bg-white text-black"
+                          onChange={(e) =>
+                            handleStatusChange(app._id, e.target.value)
+                          }
+                        >
+                          <option value="pending" disabled>
+                            Pending
+                          </option>
+                          <option value="active">Active</option>
+                          <option value="rejected">Rejected</option>
+                        </select>
+                      ) : (
+                        <span>
+                          {app.status.charAt(0).toUpperCase() +
+                            app.status.slice(1)}
+                        </span>
+                      )}
                     </td>
                     <td className="p-2 space-x-2">
                       <select
