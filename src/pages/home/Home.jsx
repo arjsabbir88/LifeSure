@@ -9,6 +9,7 @@ import NewsLetter from "@/components/newsLetter/NewsLetter";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { AuthContext } from "@/authProvider/AuthProvider";
+import AgentMarquee from "../agents/AgentsMarquee";
 
 const Home = () => {
   const [mostPurchased, setMostPurchased] = useState([]);
@@ -40,6 +41,9 @@ const Home = () => {
       </div>
       <div>
         <NewsLetter/>
+      </div>
+      <div>
+        <AgentMarquee></AgentMarquee>
       </div>
     </div>
   );
