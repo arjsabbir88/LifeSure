@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import {
   User,
@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { AuthContext } from "@/authProvider/AuthProvider";
+import Loader from "@/components/Custom/loader/Loader";
 
 const AgentApplicationForm = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +23,8 @@ const AgentApplicationForm = () => {
     resumeLink: "",
     about: "",
   });
+  const { user, loading } = useContext(AuthContext);
+  console.log(user);
   const [imageUrl, setImageUrl] = useState(null);
   const axiosSecure = useAxiosSecure();
 
@@ -30,9 +34,11 @@ const AgentApplicationForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    const imgUrl = imageUrl || user.photoURL;
     const agentData = {
       ...formData,
-      image: imageUrl,
+      image: imgUrl,
+      status: "pending",
     };
     console.log("this is agent data", agentData);
 
@@ -89,6 +95,10 @@ const AgentApplicationForm = () => {
     }
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <div className="max-w-2xl min-h-screen mx-auto p-6 bg-white rounded-2xl shadow-xl mt-10 border border-green-100">
       <h2 className="text-3xl font-bold text-green-700 mb-6 text-center">
@@ -125,7 +135,7 @@ const AgentApplicationForm = () => {
             type="email"
             name="email"
             placeholder="Email Address"
-            value={formData.email}
+            value={user?.email}
             onChange={handleChange}
             required
             className="w-full focus:outline-none"
