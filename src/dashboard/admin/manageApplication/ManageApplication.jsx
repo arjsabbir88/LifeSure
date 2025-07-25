@@ -89,7 +89,7 @@ const ManageApplications = () => {
   });
 
   const handleAssignAgent = async (id, agentId) => {
-    console.log(id,agentId)
+    console.log(id, agentId);
     const agent = agents.find((a) => a._id === agentId);
     if (!agent) return;
 
@@ -177,8 +177,9 @@ const ManageApplications = () => {
                     </td>
                     <td className="p-2 space-x-2">
                       <select
-                        className="text-sm border px-2 py-1 rounded"
-                        defaultValue=""
+                        className="text-sm border px-2 py-1 rounded bg-white"
+                        value={app.assignedAgent || ""}
+                        disabled={!!app.assignedAgent || app.status === 'rejected' || app.status.toLowerCase() ==='pending'} // disable if agent is already assigned
                         onChange={(e) =>
                           handleAssignAgent(app._id, e.target.value)
                         }
@@ -194,9 +195,10 @@ const ManageApplications = () => {
                       </select>
                       <button
                         onClick={() => handleView(app)}
-                        className="text-blue-600 hover:underline"
+                        className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
                       >
                         <Eye size={18} />
+                        Assign Agent
                       </button>
                     </td>
                   </tr>
