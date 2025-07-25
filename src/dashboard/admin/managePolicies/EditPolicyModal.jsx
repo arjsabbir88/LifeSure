@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
     imageUrl: "",
     category: "",
   });
+  const [ImagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     if (policy) {
@@ -26,8 +27,47 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
         imageUrl: policy.imageUrl,
         category: policy.category,
       });
+      setImagePreview(policy.imageUrl);
     }
   }, [policy]);
+
+  const handlePhotoUpload = async (e) => {
+    console.log("dasf")
+    const image = e.target.files[0];
+    if (!image) return;
+
+    const form = new FormData();
+    form.append("image", image);
+
+    try {
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_PHOTOUPLOADE_KEY
+        }`,
+        {
+          method: "POST",
+          body: form,
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        const uploadedUrl = data.data.url;
+        console.log("Uploaded Image URL:", uploadedUrl);
+
+        // ✅ Update both preview and formData.imageUrl
+        setImagePreview(uploadedUrl);
+        setFormData((prev) => ({ ...prev, imageUrl: uploadedUrl }));
+      } else {
+        console.error("Upload failed:", data);
+        alert("Image upload failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("An unexpected error occurred during image upload.");
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,16 +75,18 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(policy._id, formData); // Pass back to parent
-    onClose();
-  };
+  e.preventDefault();
+  console.log(ImagePreview)
+  onSubmit(policy._id, formData);
+  console.log(formData)
+  onClose();
+};
 
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-center items-center px-4"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-center items-center px-4 overflow-y-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -62,9 +104,13 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
             >
               <X />
             </button>
-            {/* <div className="my-10">
-              <img className="rounded-xl" src={formData.imageUrl} alt="" />
-            </div> */}
+            <div className="my-5 p-4 flex justify-center items-center">
+              <img
+                className="rounded-lg w-[420px] h-[270px]"
+                src={ImagePreview ? ImagePreview : policy.imageUrl}
+                alt=""
+              />
+            </div>
             <h2 className="text-xl font-semibold text-green-700 mb-4">
               ✏️ Edit Policy
             </h2>
@@ -82,7 +128,7 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label>Category</label>
+                  <label>Category(readOnly)</label>
                   <input
                     type="text"
                     name="category"
@@ -137,28 +183,40 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
                     className="input-field border outline-1 border-green-400 py-3 pl-2 rounded-sm"
                   />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col col-span-full">
                   <label>Image</label>
-                  <input
-                    type="text"
-                    name="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={handleChange}
-                    placeholder="Image URL"
-                    className="input-field col-span-full border outline-1 border-green-400 py-3 pl-2 rounded-sm"
-                  />
+                  <div className="grid md:grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      name="imageUrl"
+                      value={formData.imageUrl}
+                      onChange={handleChange}
+                      placeholder="Image URL"
+                      className="input-field w-full border outline-1 border-green-400 py-3 pl-2 rounded-sm"
+                    />
+                    {/* <input type="file" accept="image/*"/> */}
+                    <div className="flex justify-center items-center border-2 border-dashed border-gray-300 rounded-lg text-center hover:border-gray-400 transition-colors hover:text-green-500 hover:cursor-pointer">
+                      <Upload className="mx-auto text-gray-400 hover:text-green-500 hover:cursor-pointer" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        className="hover:cursor-pointer"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col">
                 <label>Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Policy Description"
-                rows={3}
-                className="input-field w-full border outline-1 border-green-400 py-3 pl-2 rounded-sm"
-              />
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Policy Description"
+                  rows={3}
+                  className="input-field w-full border outline-1 border-green-400 py-3 pl-2 rounded-sm"
+                />
               </div>
               <button
                 type="submit"

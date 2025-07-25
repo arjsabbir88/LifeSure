@@ -45,7 +45,7 @@ const ManagePolicies = () => {
     },
   });
 
-  console.log(policies);
+  // console.log(policies);
 
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
@@ -77,6 +77,7 @@ const ManagePolicies = () => {
 
   // handle update API
   const handleUpdate = async (id, updatedData) => {
+    console.log("thisis form handleUpdate function", id, updatedData);
     try {
       // await axios.put(`/api/policies/${id}`, updatedData);
       Swal.fire("Updated!", "Policy has been updated.", "success");
