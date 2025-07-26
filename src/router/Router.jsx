@@ -30,6 +30,7 @@ import AssignedCustomers from "@/dashboard/agent/assignedCustomer/AssignedCustom
 import ManageBlogs from "@/dashboard/agent/manageBlogs/ManageBlogs";
 import AdminRouter from "@/routers/AdminRouter";
 import Forbidden from "@/Error/Forbidden";
+import AgentRouter from "@/routers/AgentRouter";
 
 export const Router = createBrowserRouter([
   {
@@ -41,8 +42,8 @@ export const Router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: '/forbidden',
-        Component: Forbidden
+        path: "/forbidden",
+        Component: Forbidden,
       },
       {
         path: "/policies",
@@ -51,7 +52,10 @@ export const Router = createBrowserRouter([
       },
       {
         path: "/policiesDetails/:id",
-        Component: PolicyDetails,
+        element: <PrivetRoute>
+          <PolicyDetails/>
+        </PrivetRoute>,
+        // Component: PolicyDetails,
         loader: ({ params }) =>
           fetch(`http://localhost:3000/policies/${params.id}`),
       },
@@ -60,8 +64,11 @@ export const Router = createBrowserRouter([
         Component: Agents,
       },
       {
-        path: '/agent-application',
-        Component: AgentApplicationForm
+        path: "/agent-application",
+        element: <PrivetRoute>
+          <AgentApplicationForm/>
+        </PrivetRoute>
+        // Component: AgentApplicationForm,
       },
       {
         path: "/faqs",
@@ -77,26 +84,33 @@ export const Router = createBrowserRouter([
       },
       {
         path: "/blogs",
-        Component: Blogs
+        Component: Blogs,
       },
       {
-        path: '/blogs/details/:id',
-        element: <PrivetRoute>
-          <LatestBlogsDetails></LatestBlogsDetails>
-        </PrivetRoute>,
-        loader: ({params})=> fetch(`http://localhost:3000/blogs/details/${params.id}`)
+        path: "/blogs/details/:id",
+        element: (
+          <PrivetRoute>
+            <LatestBlogsDetails></LatestBlogsDetails>
+          </PrivetRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/blogs/details/${params.id}`),
       },
       {
-        path: '/profile',
-        element: <PrivetRoute>
-          <Profile></Profile>
-        </PrivetRoute>
+        path: "/profile",
+        element: (
+          <PrivetRoute>
+            <Profile></Profile>
+          </PrivetRoute>
+        ),
       },
       {
         path: "/dashboard",
-        Component: Dashboard,
+        element: <PrivetRoute>
+          <Dashboard/>
+        </PrivetRoute>,
+        // Component: Dashboard,
         children: [
-
           // addmin dashboard
 
           {
@@ -104,45 +118,57 @@ export const Router = createBrowserRouter([
             Component: AdminDashboard,
           },
           {
-            path: '/dashboard/manage-application',
-            element: <AdminRouter>
-              <ManageApplications></ManageApplications>
-            </AdminRouter>
+            path: "/dashboard/manage-application",
+            element: (
+              <AdminRouter>
+                <ManageApplications></ManageApplications>
+              </AdminRouter>
+            ),
             // Component: ManageApplications
           },
           {
-            path: '/dashboard/manage-application/:id',
-            element: <AdminRouter>
-              <ApplicationDetails/>
-            </AdminRouter>
+            path: "/dashboard/manage-application/:id",
+            element: (
+              <AdminRouter>
+                <ApplicationDetails />
+              </AdminRouter>
+            ),
             // Component: ApplicationDetails
           },
           {
             path: "admin/dashboard/manage-policies",
-            element: <AdminRouter>
-              <ManagePolicies/>
-            </AdminRouter>
+            element: (
+              <AdminRouter>
+                <ManagePolicies />
+              </AdminRouter>
+            ),
             // Component: ManagePolicies,
           },
           {
             path: "/dashboard/admin/dashboard/manage-policies/add-policy",
-            element: <AdminRouter>
-              <AddPolicy/>
-            </AdminRouter>
+            element: (
+              <AdminRouter>
+                <AddPolicy />
+              </AdminRouter>
+            ),
             // Component: AddPolicy,
           },
           {
             path: "/dashboard/manage-user",
-            element: <AdminRouter>
-              <ManageUser></ManageUser>
-            </AdminRouter>
+            element: (
+              <AdminRouter>
+                <ManageUser></ManageUser>
+              </AdminRouter>
+            ),
             // Component: ManageUser
           },
           {
             path: "/dashboard/manage-transactions",
-            element: <AdminRouter>
-              <ManageTransactions/>
-            </AdminRouter>
+            element: (
+              <AdminRouter>
+                <ManageTransactions />
+              </AdminRouter>
+            ),
             // Component: ManageTransactions
           },
           {
@@ -155,41 +181,59 @@ export const Router = createBrowserRouter([
           },
           {
             path: "/dashboard/blogs",
-            Component: AddBlogs
+            Component: AddBlogs,
           },
           {
-            path: '/dashboard/agents',
-            element: <AdminRouter>
-              <ManageAgents/>
-            </AdminRouter>
+            path: "/dashboard/agents",
+            element: (
+              <AdminRouter>
+                <ManageAgents />
+              </AdminRouter>
+            ),
             // Component: ManageAgents
           },
 
           // agent dashboard
           {
-            path: '/dashboard/assigned-customers',
-            Component: AssignedCustomers,
+            path: "/dashboard/assigned-customers",
+            element: (
+              <AgentRouter>
+                <AssignedCustomers />
+              </AgentRouter>
+            ),
+            // Component: AssignedCustomers,
           },
           {
-            path: '/dashboard/manage-blogs',
-            Component: ManageBlogs
+            path: "/dashboard/manage-blogs",
+            element: <AgentRouter>
+              <ManageBlogs/>
+            </AgentRouter>
+            // Component: ManageBlogs,
           },
-
 
           // customer dashboard
 
           {
-            path: '/dashboard/my-policy',
-            Component: myPolicy
+            path: "/dashboard/my-policy",
+            element: <PrivetRoute>
+              <myPolicy/>
+            </PrivetRoute>
+            // Component: myPolicy,
           },
           {
-            path: '/dashboard/claim-request',
-            Component: ClaimRequest
+            path: "/dashboard/claim-request",
+            element: <PrivetRoute>
+              <ClaimRequest/>
+            </PrivetRoute>
+            // Component: ClaimRequest,
           },
           {
-            path: '/dashboard/payment-status',
-            Component: PaymentStatus
-          }
+            path: "/dashboard/payment-status",
+            element: <PrivetRoute>
+              <PaymentStatus/>
+            </PrivetRoute>
+            // Component: PaymentStatus,
+          },
         ],
       },
     ],

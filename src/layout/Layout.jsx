@@ -1,19 +1,21 @@
 import React from "react";
 import NavBar from "../components/navbar/NavBar";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Footer from "../components/footer/Footer";
 
 const Layout = () => {
+  const location = useLocation();
+
+  const isDashboard = location.pathname.startsWith("/dashboard");
+
   return (
     <div className="min-h-screen bg-white">
-      <div>
-        <NavBar />
-      </div>
+      <div>{!isDashboard && <NavBar />}</div>
       <div>
         <Outlet />
       </div>
       <div>
-        <Footer/>
+        <Footer />
       </div>
     </div>
   );

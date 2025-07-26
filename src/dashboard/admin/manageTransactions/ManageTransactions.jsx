@@ -23,7 +23,6 @@ const ManageTransactions = () => {
       return res.data;
     },
   });
-  console.log(transactions)
 
   const totalIncome = transactions.reduce((sum, trx) => sum + trx.amount, 0);
 
