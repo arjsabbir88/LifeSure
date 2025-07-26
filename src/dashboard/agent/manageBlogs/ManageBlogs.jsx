@@ -7,6 +7,7 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import EditBlogModal from "./EditBlogModal";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Link } from "react-router";
 
 const ManageBlogs = ({ user }) => {
   const axiosSecure = useAxiosSecure();
@@ -51,6 +52,14 @@ const ManageBlogs = ({ user }) => {
       <h2 className="text-3xl font-bold text-green-800 mb-6">
         📝 Manage Your Blogs
       </h2>
+      <div className="flex md:justify-end my-5">
+        <Link
+          to="/dashboard/blogs"
+          className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
+        >
+          Add Blog
+        </Link>
+      </div>
 
       <div className="overflow-x-auto shadow rounded-lg border border-green-100">
         <table className="min-w-full divide-y divide-green-200 bg-green-50">
