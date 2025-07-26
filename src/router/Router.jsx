@@ -28,6 +28,8 @@ import ApplicationDetails from "@/dashboard/admin/manageApplication/ApplicationD
 import ManageAgents from "@/dashboard/admin/manageAgent/ManageAgents";
 import AssignedCustomers from "@/dashboard/agent/assignedCustomer/AssignedCustomers";
 import ManageBlogs from "@/dashboard/agent/manageBlogs/ManageBlogs";
+import AdminRouter from "@/routers/AdminRouter";
+import Forbidden from "@/Error/Forbidden";
 
 export const Router = createBrowserRouter([
   {
@@ -37,6 +39,10 @@ export const Router = createBrowserRouter([
       {
         index: true,
         Component: Home,
+      },
+      {
+        path: '/forbidden',
+        Component: Forbidden
       },
       {
         path: "/policies",
@@ -99,27 +105,45 @@ export const Router = createBrowserRouter([
           },
           {
             path: '/dashboard/manage-application',
-            Component: ManageApplications
+            element: <AdminRouter>
+              <ManageApplications></ManageApplications>
+            </AdminRouter>
+            // Component: ManageApplications
           },
           {
             path: '/dashboard/manage-application/:id',
-            Component: ApplicationDetails
+            element: <AdminRouter>
+              <ApplicationDetails/>
+            </AdminRouter>
+            // Component: ApplicationDetails
           },
           {
             path: "admin/dashboard/manage-policies",
-            Component: ManagePolicies,
+            element: <AdminRouter>
+              <ManagePolicies/>
+            </AdminRouter>
+            // Component: ManagePolicies,
           },
           {
             path: "/dashboard/admin/dashboard/manage-policies/add-policy",
-            Component: AddPolicy,
+            element: <AdminRouter>
+              <AddPolicy/>
+            </AdminRouter>
+            // Component: AddPolicy,
           },
           {
             path: "/dashboard/manage-user",
-            Component: ManageUser
+            element: <AdminRouter>
+              <ManageUser></ManageUser>
+            </AdminRouter>
+            // Component: ManageUser
           },
           {
             path: "/dashboard/manage-transactions",
-            Component: ManageTransactions
+            element: <AdminRouter>
+              <ManageTransactions/>
+            </AdminRouter>
+            // Component: ManageTransactions
           },
           {
             path: "/dashboard/review",
@@ -135,7 +159,10 @@ export const Router = createBrowserRouter([
           },
           {
             path: '/dashboard/agents',
-            Component: ManageAgents
+            element: <AdminRouter>
+              <ManageAgents/>
+            </AdminRouter>
+            // Component: ManageAgents
           },
 
           // agent dashboard

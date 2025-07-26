@@ -10,12 +10,15 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { AuthContext } from "@/authProvider/AuthProvider";
 import AgentMarquee from "../agents/AgentsMarquee";
+import useUserRole from "@/hooks/useUserRole";
+import Loader from "@/components/Custom/loader/Loader";
 
 const Home = () => {
   const [mostPurchased, setMostPurchased] = useState([]);
   const axiosSecure = useAxiosSecure();
+  const {role,roleLoading} = useUserRole()
 
-  const {user} = useContext(AuthContext)
+  console.log(role)
 
   useEffect(() => {
     axios("http://localhost:3000/top-policies")
@@ -26,7 +29,9 @@ const Home = () => {
       .catch((err) => console.log(err.message));
   }, []);
 
-
+  if(roleLoading){
+    return <Loader></Loader>
+  }
 
   return (
     <div className="w-full min-h-screen">
