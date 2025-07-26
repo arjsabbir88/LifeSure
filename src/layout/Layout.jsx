@@ -7,10 +7,13 @@ const Layout = () => {
   const location = useLocation();
 
   const isDashboard = location.pathname.startsWith("/dashboard");
+  const isForbidden = location.pathname.startsWith("/forbidden");
+
+  const hideNavBar = isDashboard || isForbidden;
 
   return (
     <div className="min-h-screen bg-white">
-      <div>{!isDashboard && <NavBar />}</div>
+      <div className="shadow sticky top-0 z-40">{!hideNavBar && <NavBar />}</div>
       <div>
         <Outlet />
       </div>

@@ -23,10 +23,10 @@ export default function Login() {
     password: "",
   });
 
-  const axiosInstance = useAxios()
+  const axiosInstance = useAxios();
 
   const navigate = useNavigate();
-  const from = location.state?.from || "/";
+  const from = location.state?.from || '/';
 
   const { user, loading, signIn, googleSignIn, setLoading } =
     useContext(AuthContext);
@@ -43,7 +43,7 @@ export default function Login() {
       .then((res) => {
         console.log("login Successfully", res.user);
         setLoading(false);
-        navigate("/");
+        navigate(from);
       })
       .catch((err) => {
         console.log("login failed", err.message);
@@ -53,33 +53,35 @@ export default function Login() {
   };
 
   const loginWithGoogle = () => {
-  googleSignIn()
-    .then(async (res) => {
-      const user = res.user; 
+    googleSignIn()
+      .then(async (res) => {
+        const user = res.user;
 
-      const userInfo = {
-        profilePic: user.photoURL,
-        role: "Customer",
-        name: user.displayName
-      };
+        const userInfo = {
+          profilePic: user.photoURL,
+          role: "Customer",
+          name: user.displayName,
+        };
 
-      // ✅ Call backend with PUT and upsert logic
-      const userRes = await axiosInstance.put(`/users/${user.email}`, userInfo);
+        // ✅ Call backend with PUT and upsert logic
+        const userRes = await axiosInstance.put(
+          `/users/${user.email}`,
+          userInfo
+        );
 
-      console.log("User login or updated:", userRes.data);
+        console.log("User login or updated:", userRes.data);
 
-      toast.success("Login Successfully");
-      console.log("Google login successful", user);
-      setLoading(false);
-      navigate(from || "/");
-    })
-    .catch((err) => {
-      console.error("Google login failed", err.message);
-      toast.error(err.message);
-      setLoading(false);
-    });
-};
-
+        toast.success("Login Successfully");
+        console.log("Google login successful", user);
+        setLoading(false);
+        navigate(from || "/");
+      })
+      .catch((err) => {
+        console.error("Google login failed", err.message);
+        toast.error(err.message);
+        setLoading(false);
+      });
+  };
 
   if (loading) {
     return <p>components is loading .........</p>;
@@ -233,7 +235,7 @@ export default function Login() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes blob {
           0% {
             transform: translate(0px, 0px) scale(1);

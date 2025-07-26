@@ -31,11 +31,13 @@ import ManageBlogs from "@/dashboard/agent/manageBlogs/ManageBlogs";
 import AdminRouter from "@/routers/AdminRouter";
 import Forbidden from "@/Error/Forbidden";
 import AgentRouter from "@/routers/AgentRouter";
+import ErrorPage from "@/Error/ErrorPage";
 
 export const Router = createBrowserRouter([
   {
     path: "/",
     Component: Layout,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,

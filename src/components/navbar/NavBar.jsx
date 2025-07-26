@@ -104,14 +104,14 @@ export default function NavBar() {
           </Link>
 
           {/* Center: Nav links (hidden on mobile) */}
-          <div className="hidden md:flex gap-6 text-sm font-medium text-gray-700">
+          <div className="hidden lg:flex gap-6 text-sm font-medium text-gray-700">
             {links}
           </div>
 
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
             {/* Search bar (hidden on mobile) */}
-            <div className="relative hidden md:block">
+            <div className="relative hidden lg:block">
               <input
                 type="text"
                 placeholder="Search..."
@@ -124,7 +124,7 @@ export default function NavBar() {
             </div>
 
             {/* Bell */}
-            <div className="relative cursor-pointer">
+            <div className="hidden lg:block relative cursor-pointer">
               <Bell className="text-gray-700" size={20} />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full">
                 3
@@ -165,7 +165,7 @@ export default function NavBar() {
 
             {/* Hamburger menu (shown on mobile) */}
             <button
-              className="md:hidden ml-2"
+              className="lg:hidden ml-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -175,7 +175,7 @@ export default function NavBar() {
 
         {/* Mobile Nav Links */}
         {mobileMenuOpen && (
-          <div className="mt-4 md:hidden flex flex-col gap-2 text-sm font-medium text-gray-700">
+          <div className="mt-4 lg:hidden flex flex-col gap-2 text-sm font-medium text-gray-700">
             {links}
           </div>
         )}
