@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Eye,
   EyeOff,
@@ -22,6 +22,10 @@ export default function Login() {
     email: "",
     password: "",
   });
+
+   useEffect(() => {
+      document.title = "Login | LifeSure";
+    }, []);
 
   const axiosInstance = useAxios();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -58,6 +58,10 @@ export default function Profile() {
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [imageURL, setImageURL] = useState(null);
+
+   useEffect(() => {
+      document.title = "Profile | LifeSure";
+    }, []);
 
   const handleNameEdit = () => {
     setTempName(isUser?.displayName);
@@ -263,7 +267,7 @@ export default function Profile() {
                       className="flex-1 flex items-center gap-2"
                     >
                       <Input
-                        value={isUser?.displayName}
+                        defaultValue={isUser?.displayName}
                         onChange={(e) => setTempName(e.target.value)}
                         className="flex-1"
                         autoFocus

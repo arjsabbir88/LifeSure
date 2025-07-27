@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Eye,
   EyeOff,
@@ -53,6 +53,10 @@ export default function Register() {
   const [errors, setErrors] = useState({});
 
   const axiosInstance = useAxios();
+
+   useEffect(() => {
+      document.title = "Register | LifeSure";
+    }, []);
 
   const handlePhotoUpload = async (e) => {
     const image = e.target.files[0];

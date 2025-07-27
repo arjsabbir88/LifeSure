@@ -3,7 +3,7 @@ import Loader from "@/components/Custom/loader/Loader";
 import { Button } from "@/components/ui/button";
 import useUserRole from "@/hooks/useUserRole";
 import { Bell, MessageCircle, Menu, X, Siren, GitPullRequestDraft, CircleDollarSign, UserPen, House, Users, FileUser, UserCog, FileStack, ShieldUser, LayoutGrid, BadgeDollarSign } from "lucide-react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet } from "react-router";
 import { toast } from "sonner"
 
@@ -12,6 +12,10 @@ const Dashboard = () => {
   const { role, roleLoading } = useUserRole();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const {logout} = useContext(AuthContext)
+
+   useEffect(() => {
+      document.title = "Dashboard | LifeSure";
+    }, []);
 
   if (roleLoading || loading) {
     return <Loader />;

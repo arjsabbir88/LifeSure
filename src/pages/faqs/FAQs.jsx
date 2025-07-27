@@ -1,5 +1,5 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Plus, Minus } from "lucide-react"
 
 const faqData = [
@@ -43,6 +43,10 @@ const faqData = [
 
 export default function FAQs() {
   const [openItems, setOpenItems] = useState(new Set())
+
+   useEffect(() => {
+      document.title = "FAQs | LifeSure";
+    }, []);
 
   const toggleItem = (id) => {
     const newOpenItems = new Set(openItems)

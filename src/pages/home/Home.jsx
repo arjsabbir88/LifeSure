@@ -12,36 +12,38 @@ import Loader from "@/components/Custom/loader/Loader";
 import useAxios from "@/hooks/useAxios";
 
 const Home = () => {
-  const {role,roleLoading} = useUserRole()
-  const axiosInstance = useAxios()
+  const { role, roleLoading } = useUserRole();
+  const axiosInstance = useAxios();
 
+  useEffect(() => {
+    document.title = "Home | LifeSure";
+  }, []);
 
+  const { data: mostPurchased = [], isLoading } = useQuery({
+    queryKey: ["mostPurchased-Policy"],
+    queryFn: async () => {
+      const res = await axiosInstance("/top-policies");
+      return res.data;
+    },
+  });
 
-    const {data :mostPurchased=[], isLoading} = useQuery({
-      queryKey: ['mostPurchased-Policy'],
-      queryFn:async ()=>{
-        const res = await axiosInstance('/top-policies');
-        return res.data
-      }
-    })
-
-  if(roleLoading || isLoading){
-    return <Loader></Loader>
+  if (roleLoading || isLoading) {
+    return <Loader></Loader>;
   }
 
   return (
     <div className="w-full min-h-screen">
       <div>
         <HeroSlider />
-        <MostPurchasedPolicies mostPurchased={mostPurchased}/>
-        <LifeSureBenefits/>
+        <MostPurchasedPolicies mostPurchased={mostPurchased} />
+        <LifeSureBenefits />
         <ReviewSection></ReviewSection>
       </div>
       <div>
-        <LatestBlogs/>
+        <LatestBlogs />
       </div>
       <div>
-        <NewsLetter/>
+        <NewsLetter />
       </div>
       <div>
         <AgentMarquee></AgentMarquee>

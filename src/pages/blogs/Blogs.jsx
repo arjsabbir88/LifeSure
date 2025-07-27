@@ -23,6 +23,9 @@ export default function Blogs() {
         }
       })
 
+       useEffect(() => {
+          document.title = "Blogs | LifeSure";
+        }, []);
 
   const [isVisible, setIsVisible] = useState(false)
 
