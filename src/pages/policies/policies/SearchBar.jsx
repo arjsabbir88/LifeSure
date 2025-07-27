@@ -23,7 +23,7 @@ export default function SearchBar({ onResults }) {
   };
 
   return (
-    <div className="relative md:hidden flex gap-2 items-center">
+    <div className="relative flex gap-2 items-center">
       <div className="relative flex-1">
         <input
           type="text"

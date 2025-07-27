@@ -7,10 +7,10 @@ import {
   FunnelIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router";
-import { Search } from "lucide-react";
 import SearchBar from "./SearchBar";
 
 export default function InsurancePolicies({ insurancePolicies }) {
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
@@ -42,7 +42,7 @@ export default function InsurancePolicies({ insurancePolicies }) {
   const totalPages = Math.ceil(filteredPolicies.length / policiesPerPage);
   const startIndex = (currentPage - 1) * policiesPerPage;
   const endIndex = startIndex + policiesPerPage;
-  const currentPolicies = filteredPolicies.slice(startIndex, endIndex);
+  let currentPolicies = filteredPolicies.slice(startIndex, endIndex);
 
   // Reset to first page when category changes
   const handleCategoryChange = (category) => {
@@ -60,6 +60,11 @@ export default function InsurancePolicies({ insurancePolicies }) {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if(!!searchResults){
+    currentPolicies = searchResults;
+  }
+
 
   return (
     <div className="min-h-screen bg-base-100">
@@ -79,10 +84,16 @@ export default function InsurancePolicies({ insurancePolicies }) {
         {/* Filter Section */}
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold">Available Policies</h2>
-              <div className="badge badge-success badge-xl px-3 bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
-                {filteredPolicies.length}
+            <div className="w-full flex justify-around items-center flex-col md:flex-row">
+              <div className="flex items-center gap-2 mb-3">
+                <h2 className="text-xl font-semibold">Available Policies</h2>
+
+                <div className="badge badge-success badge-xl px-3 bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
+                  {filteredPolicies.length}
+                </div>
+              </div>
+              <div className="relative">
+                <SearchBar onResults={(data) => setSearchResults(data)} />
               </div>
             </div>
 
@@ -94,9 +105,6 @@ export default function InsurancePolicies({ insurancePolicies }) {
               <FunnelIcon className="w-4 h-4" />
               Filters
             </button>
-            <div className="relative md:block">
-              <SearchBar onResults={(data) => setSearchResults(data)} />
-            </div>
           </div>
 
           {/* Filter Buttons */}
@@ -115,13 +123,9 @@ export default function InsurancePolicies({ insurancePolicies }) {
                   {category}
                 </button>
               ))}
-              <div className="relative hidden md:block">
-                <SearchBar onResults={(data) => setSearchResults(data)} />
-              </div>
             </div>
           </div>
         </div>
-
         {/* Policies Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {currentPolicies.map((policy) => (
