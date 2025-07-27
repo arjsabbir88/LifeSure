@@ -39,7 +39,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex h-screen bg-green-50">
+    <div className="flex min-h-screen bg-green-50">
       {/* Mobile Overlay */}
       {mobileMenuOpen && (
         <div
@@ -54,9 +54,9 @@ const Dashboard = () => {
         fixed lg:translate-x-0 lg:static z-50 h-full w-64 md:w-72 bg-green-900 text-white 
         transition-transform duration-300 ease-in-out transform lg:transform-none`}
       >
-        <div className="flex flex-col justify-between h-full p-6">
+        <div className="flex flex-col justify-between min-h-screen p-6 sticky top-0">
           {/* Top Section */}
-          <div>
+          <div className="h-full">
             <div className="flex justify-between">
               <Link
                 to="/"
@@ -179,7 +179,7 @@ const Dashboard = () => {
           </div>
 
           {/* Bottom User Info Section */}
-          <div className="pt-6 border-t border-green-700">
+          <div className="pt-6 border-t border-green-700 ">
             <div className="flex items-center space-x-3 mb-2">
               <img
                 src={user?.photoURL || "https://via.placeholder.com/40"}
