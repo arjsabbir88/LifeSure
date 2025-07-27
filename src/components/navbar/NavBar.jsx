@@ -26,10 +26,18 @@ export default function NavBar() {
 
   const auth = (
     <>
-      <Link className="btn btn-soft btn-success px-6 rounded-lg bg-gradient-to-r hover:from-green-600 hover:to-green-800 hover:text-white text-black" 
-      to="/auth/login">Sign In</Link>
-      <Link className="btn btn-soft btn-success px-6 rounded-lg bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black" 
-      to="/auth/register">Sign In</Link>
+      <Link
+        className="btn btn-soft btn-success px-6 rounded-lg bg-gradient-to-r hover:from-green-600 hover:to-green-800 hover:text-white text-black"
+        to="/auth/login"
+      >
+        Sign In
+      </Link>
+      <Link
+        className="btn btn-soft btn-success px-6 rounded-lg bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
+        to="/auth/register"
+      >
+        Sign In
+      </Link>
     </>
   );
 
@@ -38,13 +46,15 @@ export default function NavBar() {
       <NavLink to="/" className="flex items-center gap-1 hover:text-green-600">
         <Home size={16} /> Home
       </NavLink>
-      <NavLink
-        to="/dashboard"
-        className="flex items-center gap-1 hover:text-green-600"
-      >
-        <LayoutDashboard size={16} />
-        Dashboard{" "}
-      </NavLink>
+      {user && (
+        <NavLink
+          to="/dashboard"
+          className="flex items-center gap-1 hover:text-green-600"
+        >
+          <LayoutDashboard size={16} />
+          Dashboard{" "}
+        </NavLink>
+      )}
       <NavLink
         to="/policies"
         className="flex items-center gap-1 hover:text-green-600"
@@ -76,16 +86,15 @@ export default function NavBar() {
     </>
   );
 
-
-  const handleLogOut =()=>{
+  const handleLogOut = () => {
     logout()
-    .then((res)=>{
-      console.log("logout")
-      toast.success("User Logout Successfully");
-    }).catch(err=>{
-      toast.error(err.message);
-    })
-  }
+      .then((res) => {
+        toast.success("User Logout Successfully");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
 
   return (
     <nav className="bg-white border-b shadow-sm px-4 md:px-6 py-3">
@@ -110,7 +119,6 @@ export default function NavBar() {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
-
             {/* Bell */}
             <div className="hidden lg:block relative cursor-pointer">
               <Bell className="text-gray-700" size={20} />
@@ -126,12 +134,22 @@ export default function NavBar() {
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 text-white flex items-center justify-center hover:cursor-pointer"
                 >
-
-                  {user?.photoURL?<img className="h-8 w-8 rounded-full" src={user?.photoURL} alt="" /> : <User size={18} />}
+                  {user?.photoURL ? (
+                    <img
+                      className="h-8 w-8 rounded-full"
+                      src={user?.photoURL}
+                      alt=""
+                    />
+                  ) : (
+                    <User size={18} />
+                  )}
                 </button>
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-40 bg-white border rounded-md shadow-lg z-50 text-sm">
-                    <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 hover:bg-gray-100"
+                    >
                       Profile
                     </Link>
                     <a href="#" className="block px-4 py-2 hover:bg-gray-100">
@@ -139,7 +157,7 @@ export default function NavBar() {
                     </a>
                     <hr />
                     <button
-                     onClick={handleLogOut}
+                      onClick={handleLogOut}
                       className="block px-4 py-2 text-red-500 hover:bg-red-50 w-full"
                     >
                       Sign Out
@@ -148,7 +166,7 @@ export default function NavBar() {
                 )}
               </div>
             ) : (
-              auth 
+              auth
             )}
 
             {/* Hamburger menu (shown on mobile) */}

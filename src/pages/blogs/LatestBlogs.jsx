@@ -27,7 +27,6 @@ export default function LatestBlogs() {
         }
       })
 
-      console.log(blogPosts.length)
 
   const [isVisible, setIsVisible] = useState(false);
 

@@ -72,14 +72,13 @@ export default function Register() {
       const data = await response.json();
 
       if (data.success) {
-        console.log("Uploaded Image URL:", data.data.url);
         setImagePreview(data.data.url);
         setImageUrl(data.data.url);
       } else {
-        console.error("Upload failed:", data);
+        
       }
     } catch (error) {
-      console.error("Error uploading image:", error);
+      
     }
   };
 
@@ -116,13 +115,12 @@ export default function Register() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setIsLoading(false);
-      console.log("Registration attempt:", formData);
+      
     }
 
     // call createUser function here
     createUser(formData.email, formData.password)
       .then(async (res) => {
-        console.log("user created successfully", res);
 
         const userInfo = {
           email: formData.email,
@@ -134,7 +132,6 @@ export default function Register() {
         };
 
         const userRes = await axiosInstance.post("/user-info-created", userInfo);
-        console.log(userRes);
 
         const userProfile = {
           displayName: capitalize(formData.firstName) + "" +formData.lastName,
@@ -143,10 +140,10 @@ export default function Register() {
 
         updateUserProfile(userProfile)
           .then(() => {
-            console.log("profile name pic updated");
+            
           })
           .catch((error) => {
-            console.log(error);
+            
           });
 
         setFormData({
@@ -161,7 +158,7 @@ export default function Register() {
         navigate(from);
       })
       .catch((err) => {
-        console.log(err);
+        
         toast.error(err.message);
       });
   };
@@ -181,15 +178,13 @@ export default function Register() {
       // ✅ Call backend with PUT and upsert logic
       const userRes = await axiosInstance.put(`/users/${user.email}`, userInfo);
 
-      console.log("User login or updated:", userRes.data);
+      
 
       toast.success("Login Successfully");
-      console.log("Google login successful", user);
       setLoading(false);
       navigate(from || "/");
     })
     .catch((err) => {
-      console.error("Google login failed", err.message);
       toast.error(err.message);
       setLoading(false);
     });

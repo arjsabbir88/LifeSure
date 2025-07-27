@@ -10,7 +10,6 @@ import { Link } from "react-router";
 import SearchBar from "./SearchBar";
 
 export default function InsurancePolicies({ insurancePolicies }) {
-
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
@@ -27,7 +26,6 @@ export default function InsurancePolicies({ insurancePolicies }) {
     "family",
   ];
 
-  console.log(searchResults);
   // Filter policies based on selected category
   const filteredPolicies = useMemo(() => {
     if (selectedCategory === "All") {
@@ -61,10 +59,9 @@ export default function InsurancePolicies({ insurancePolicies }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if(!!searchResults){
+  if (!!searchResults) {
     currentPolicies = searchResults;
   }
-
 
   return (
     <div className="min-h-screen bg-base-100">

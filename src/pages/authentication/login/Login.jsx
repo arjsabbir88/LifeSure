@@ -41,15 +41,12 @@ export default function Login() {
 
     signIn(formData.email, formData.password)
       .then((res) => {
-        console.log("login Successfully", res.user);
         setLoading(false);
         navigate(from);
       })
       .catch((err) => {
         console.log("login failed", err.message);
       });
-
-    console.log("Login attempt:", formData);
   };
 
   const loginWithGoogle = () => {
