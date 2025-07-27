@@ -25,7 +25,7 @@ export default function Register() {
     updateUserProfile,
     setUser,
     loading,
-    setLoading
+    setLoading,
   } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -75,11 +75,8 @@ export default function Register() {
         setImagePreview(data.data.url);
         setImageUrl(data.data.url);
       } else {
-        
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const handleSubmit = async (e) => {
@@ -98,6 +95,12 @@ export default function Register() {
 
     if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
+    } else if (!/[a-z]/.test(formData.password)) {
+      newErrors.password =
+        "Password must include at least one lowercase letter";
+    } else if (!/[A-Z]/.test(formData.password)) {
+      newErrors.password =
+        "Password must include at least one uppercase letter";
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -115,36 +118,33 @@ export default function Register() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setIsLoading(false);
-      
     }
 
     // call createUser function here
     createUser(formData.email, formData.password)
       .then(async (res) => {
-
         const userInfo = {
           email: formData.email,
           profilePic: imageUrl,
           role: "Customer",
           created_at: new Date().toISOString(),
           last_log_in: new Date().toISOString(),
-          name: capitalize(formData.firstName) + "" +formData.lastName,
+          name: capitalize(formData.firstName) + "" + formData.lastName,
         };
 
-        const userRes = await axiosInstance.post("/user-info-created", userInfo);
+        const userRes = await axiosInstance.post(
+          "/user-info-created",
+          userInfo
+        );
 
         const userProfile = {
-          displayName: capitalize(formData.firstName) + "" +formData.lastName,
+          displayName: capitalize(formData.firstName) + "" + formData.lastName,
           photoURL: imageUrl,
         };
 
         updateUserProfile(userProfile)
-          .then(() => {
-            
-          })
-          .catch((error) => {
-            
-          });
+          .then(() => {})
+          .catch((error) => {});
 
         setFormData({
           firstName: "",
@@ -158,38 +158,37 @@ export default function Register() {
         navigate(from);
       })
       .catch((err) => {
-        
         toast.error(err.message);
       });
   };
 
   // handle google signIn
   const loginWithGoogle = () => {
-  googleSignIn()
-    .then(async (res) => {
-      const user = res.user;
+    googleSignIn()
+      .then(async (res) => {
+        const user = res.user;
 
-      const userInfo = {
-        profilePic: user.photoURL,
-        role: "Customer", // default role, backend may override
-        name: user.displayName
-      };
+        const userInfo = {
+          profilePic: user.photoURL,
+          role: "Customer", // default role, backend may override
+          name: user.displayName,
+        };
 
-      // ✅ Call backend with PUT and upsert logic
-      const userRes = await axiosInstance.put(`/users/${user.email}`, userInfo);
+        // ✅ Call backend with PUT and upsert logic
+        const userRes = await axiosInstance.put(
+          `/users/${user.email}`,
+          userInfo
+        );
 
-      
-
-      toast.success("Login Successfully");
-      setLoading(false);
-      navigate(from || "/");
-    })
-    .catch((err) => {
-      toast.error(err.message);
-      setLoading(false);
-    });
-};
-
+        toast.success("Login Successfully");
+        setLoading(false);
+        navigate(from || "/");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        setLoading(false);
+      });
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
