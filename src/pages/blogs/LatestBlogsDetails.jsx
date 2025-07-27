@@ -10,16 +10,7 @@ import { data, Link, useLoaderData, useParams } from "react-router"
 import { AuthContext } from "@/authProvider/AuthProvider"
 import useAxiosSecure from "@/hooks/useAxiosSecure"
 
-// const articleData = {
-//   title: "5 Tips to Choose the Right Life Insurance Policy",
-//   content:
-//     "Choosing the right life insurance depends on your financial goals, age, dependents, and long-term plans. Evaluate term vs whole life, check insurer credibility, and always compare policies before buying.",
-//   summary:
-//     "Confused about which policy to pick? Here are five key tips to guide you in choosing the best life insurance based on your needs.",
-//   image: "https://i.ibb.co/8DXgcXyX/Adobe-Stock-163363685-Preview.jpg",
-//   createdAt: "2025-07-20T12:42:05.387Z",
-//   createdBy: "arjsabbir8@gmail.com",
-// }
+
 
 const tips = [
   {
@@ -55,7 +46,7 @@ const tips = [
 ]
 
 export default function LatestBlogsDetails() {
-    // const articleData = useLoaderData();
+  
     
     const {user,loading} = useContext(AuthContext);
     const axiosSecure = useAxiosSecure()

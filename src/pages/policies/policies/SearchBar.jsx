@@ -13,7 +13,7 @@ export default function SearchBar({ onResults }) {
     }
 
     try {
-      const res = await axios.get(`http://localhost:3000/search?q=${query}`);
+      const res = await axios.get(`https://life-sure-server-omega.vercel.app/search?q=${query}`);
       onResults(res.data); // callback to handle search result
       toast.success("Search complete");
     } catch (err) {

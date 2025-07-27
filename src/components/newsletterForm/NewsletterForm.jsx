@@ -9,10 +9,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { CheckCircle, Mail, User } from "lucide-react"
 import axios from "axios"
 import { toast } from "sonner"
+import useAxios from "@/hooks/useAxios"
 
 export default function NewsletterForm() {
   const [state, action, isPending] = useActionState(null)
   const [isVisible, setIsVisible] = useState(false)
+  const axiosInstance = useAxios()
 
   useEffect(() => {
     setIsVisible(true)
@@ -27,7 +29,7 @@ export default function NewsletterForm() {
 
 
 
-    axios.post('http://localhost:3000/subscription',convertedData)
+    axiosInstance.post('/subscription',convertedData)
     .then((res)=>{
         if(res.data.insertedId){
             toast.success("Thanks for Subscription request!!")

@@ -50,16 +50,14 @@ export const Router = createBrowserRouter([
       {
         path: "/policies",
         Component: Policies,
-        loader: () => fetch("http://localhost:3000/policies"),
       },
       {
         path: "/policiesDetails/:id",
         element: <PrivetRoute>
           <PolicyDetails/>
         </PrivetRoute>,
-        // Component: PolicyDetails,
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/policies/${params.id}`),
+          fetch(`https://life-sure-server-omega.vercel.app/policies/${params.id}`),
       },
       {
         path: "/agents",
@@ -70,7 +68,7 @@ export const Router = createBrowserRouter([
         element: <PrivetRoute>
           <AgentApplicationForm/>
         </PrivetRoute>
-        // Component: AgentApplicationForm,
+        
       },
       {
         path: "/faqs",
@@ -95,8 +93,7 @@ export const Router = createBrowserRouter([
             <LatestBlogsDetails></LatestBlogsDetails>
           </PrivetRoute>
         ),
-        loader: ({ params }) =>
-          fetch(`http://localhost:3000/blogs/details/${params.id}`),
+        
       },
       {
         path: "/profile",
@@ -111,9 +108,9 @@ export const Router = createBrowserRouter([
         element: <PrivetRoute>
           <Dashboard/>
         </PrivetRoute>,
-        // Component: Dashboard,
+        
         children: [
-          // addmin dashboard
+         
 
           {
             index: true,
@@ -126,7 +123,7 @@ export const Router = createBrowserRouter([
                 <ManageApplications></ManageApplications>
               </AdminRouter>
             ),
-            // Component: ManageApplications
+            
           },
           {
             path: "/dashboard/manage-application/:id",
@@ -135,7 +132,7 @@ export const Router = createBrowserRouter([
                 <ApplicationDetails />
               </AdminRouter>
             ),
-            // Component: ApplicationDetails
+            
           },
           {
             path: "admin/dashboard/manage-policies",
@@ -144,7 +141,7 @@ export const Router = createBrowserRouter([
                 <ManagePolicies />
               </AdminRouter>
             ),
-            // Component: ManagePolicies,
+            
           },
           {
             path: "/dashboard/admin/dashboard/manage-policies/add-policy",
@@ -153,7 +150,7 @@ export const Router = createBrowserRouter([
                 <AddPolicy />
               </AdminRouter>
             ),
-            // Component: AddPolicy,
+            
           },
           {
             path: "/dashboard/manage-user",
@@ -162,7 +159,7 @@ export const Router = createBrowserRouter([
                 <ManageUser></ManageUser>
               </AdminRouter>
             ),
-            // Component: ManageUser
+            
           },
           {
             path: "/dashboard/manage-transactions",
@@ -171,7 +168,7 @@ export const Router = createBrowserRouter([
                 <ManageTransactions />
               </AdminRouter>
             ),
-            // Component: ManageTransactions
+            
           },
           {
             path: "/dashboard/review",
@@ -192,10 +189,10 @@ export const Router = createBrowserRouter([
                 <ManageAgents />
               </AdminRouter>
             ),
-            // Component: ManageAgents
+            
           },
 
-          // agent dashboard
+          
           {
             path: "/dashboard/assigned-customers",
             element: (
@@ -203,38 +200,38 @@ export const Router = createBrowserRouter([
                 <AssignedCustomers />
               </AgentRouter>
             ),
-            // Component: AssignedCustomers,
+            
           },
           {
             path: "/dashboard/manage-blogs",
             element: <AgentRouter>
               <ManageBlogs/>
             </AgentRouter>
-            // Component: ManageBlogs,
+            
           },
 
-          // customer dashboard
+          
 
           {
             path: "/dashboard/my-policy",
             element: <PrivetRoute>
               <MyPolicy/>
             </PrivetRoute>
-            // Component: myPolicy,
+            
           },
           {
             path: "/dashboard/claim-request",
             element: <PrivetRoute>
               <ClaimRequest/>
             </PrivetRoute>
-            // Component: ClaimRequest,
+            
           },
           {
             path: "/dashboard/payment-status",
             element: <PrivetRoute>
               <PaymentStatus/>
             </PrivetRoute>
-            // Component: PaymentStatus,
+            
           },
         ],
       },

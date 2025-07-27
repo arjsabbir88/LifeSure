@@ -54,7 +54,7 @@ export default function PolicyPDF({ policy }) {
         <Text><Text style={styles.label}>Country:</Text> {policy.country}</Text>
 
         <Text style={styles.subheading}>Health & Lifestyle</Text>
-        <Text><Text style={styles.label}>Health Conditions:</Text> {policy.healthConditions.join(", ")}</Text>
+        <Text><Text style={styles.label}>Health Conditions:</Text> {policy?.healthConditions.join(", ")}</Text>
         <Text><Text style={styles.label}>Current Medications:</Text> {policy.currentMedications}</Text>
         <Text><Text style={styles.label}>Exercise Frequency:</Text> {policy.exerciseFrequency}</Text>
         <Text><Text style={styles.label}>Smoking Status:</Text> {policy.smokingStatus}</Text>

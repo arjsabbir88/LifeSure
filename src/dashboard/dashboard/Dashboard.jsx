@@ -61,7 +61,7 @@ const Dashboard = () => {
               >
                 LifeSure
               </Link>
-              <button className="text-white pb-10 hover:text-red-600 hover:cursor-pointer" onClick={closeMobileMenu}>
+              <button className="text-white md:hidden pb-10 hover:text-red-600 hover:cursor-pointer" onClick={closeMobileMenu}>
                 <X />
               </button>
             </div>
