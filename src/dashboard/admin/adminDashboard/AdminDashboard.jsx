@@ -105,14 +105,14 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-8 overflow-hidden">
       <div className="flex items-center justify-between bg-white shadow px-6 py-4 sticky top-0 z-40">
-        <h2 className="text-xl font-semibold text-green-900">Home/Dashboard</h2>
+        <h2 className="text-xs md:block md:text-xl font-semibold text-green-900">Home/Dashboard</h2>
 
         {/* Right-side controls */}
         <div className="flex items-center space-x-4">
           {/* Search */}
-          <div className="relative">
+          <div className="relative hidden md:block">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
             <input
               type="text"
