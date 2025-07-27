@@ -86,7 +86,6 @@ const ManageApplications = () => {
   });
 
   const handleAssignAgent = async (id, agentId) => {
-    console.log(id, agentId);
     const agent = agents.find((a) => a._id === agentId);
     if (!agent) return;
 

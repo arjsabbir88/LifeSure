@@ -146,8 +146,7 @@ export default function ApplicationDetails() {
   const query = useQueryParams();
     const policyId = query.get("bookingId");
   const email = query.get("email");
-  console.log(email);
-    console.log("bookingId", policyId);
+
 
   const { data: policyData,isLoading } = useQuery({
     queryKey: ["booking-info", email, policyId],
@@ -167,7 +166,6 @@ export default function ApplicationDetails() {
     return <Loader></Loader>
   }
 
-  console.log(policyData);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 p-4 md:p-6 lg:p-8">

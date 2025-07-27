@@ -22,7 +22,6 @@ export default function NavBar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
-  // console.log(user)
 
   const auth = (
     <>

@@ -18,7 +18,7 @@ function ClaimRequest() {
 
     const axiosSecure = useAxiosSecure()
     const {user} = useContext(AuthContext);
-    console.log(user)
+
 
     const {isPanding, data: claimPolicy=[]} = useQuery({
         queryKey: ['my-policy', user?.email],
@@ -44,19 +44,19 @@ const handleSubmit = (e) => {
       status: "Pending",
     };
 
-    console.log("📨 Submitted Claim Request:", formData);
+
     // You can use axiosSecure.post('/claim-submit', formData) here
 
     axiosSecure.post('/policy-claim-request', formData)
     .then((res)=>{
-      console.log(res.data)
+     
       if(res.data.insertedId){
         toast.success('Claim Request Sended Successfully!!')
         setReason('');
         setSelectedPolicy('')
       }
     }).catch(err=>{
-      console.log(err);
+   
       toast.error(err.message);
     })
   };

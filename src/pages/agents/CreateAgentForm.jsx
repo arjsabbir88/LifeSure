@@ -24,7 +24,7 @@ const AgentApplicationForm = () => {
     about: "",
   });
   const { user, loading } = useContext(AuthContext);
-  console.log(user);
+  
   const [imageUrl, setImageUrl] = useState(null);
   const axiosSecure = useAxiosSecure();
 
@@ -40,7 +40,7 @@ const AgentApplicationForm = () => {
       image: imgUrl,
       status: "pending",
     };
-    console.log("this is agent data", agentData);
+    
 
     e.preventDefault();
     try {
@@ -58,7 +58,7 @@ const AgentApplicationForm = () => {
         });
         setImageUrl(null);
       }
-      console.log(agentData);
+      
     } catch (error) {
       console.error(error);
       toast.error("Submission failed. Try again.");
@@ -69,8 +69,8 @@ const AgentApplicationForm = () => {
     const image = e.target.files[0];
     const formData = new FormData();
     formData.append("image", image);
-    console.log(formData);
-    console.log("handlephotoupload called");
+    
+   
 
     try {
       const response = await fetch(
@@ -85,7 +85,7 @@ const AgentApplicationForm = () => {
       const data = await response.json();
 
       if (data.success) {
-        console.log("Uploaded Image URL:", data.data.url);
+        
         setImageUrl(data.data.url);
       } else {
         console.error("Upload failed:", data);

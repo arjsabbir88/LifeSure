@@ -57,13 +57,13 @@ const formatCurrency = (amount) => {
 
 export default function PaymentStatus() {
   const handlePayNow = (paymentId) => {
-    console.log(`Initiating payment for ${paymentId}`);
+   
     // Add payment logic here
   };
 
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
-  console.log(user?.email);
+  
 
   const { isPanding, data: activePolicy = [] ,refetch} = useQuery({
     queryKey: ["my-policy", user?.email],
@@ -74,7 +74,7 @@ export default function PaymentStatus() {
     },
   });
 
-  console.log(activePolicy);
+ 
 
   const handleViewDetails = (paymentId) => {
     console.log(`Viewing details for ${paymentId}`);

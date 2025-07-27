@@ -43,15 +43,15 @@ const roleConfig = {
 export default function Profile() {
   const fileInputRef = useRef();
   const { user, updateUserProfile } = useContext(AuthContext);
-  // console.log(user)
+
 
   const [isUser, setIsUser] = useState(user);
-  console.log(isUser);
+  
 
   const logInTime = isUser.metadata.lastLoginAt;
   const date = new Date(parseInt(logInTime)).toLocaleDateString();
   const time = new Date(parseInt(logInTime)).toLocaleTimeString("en-BD");
-  console.log(date, time);
+  
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(user.displayName);
@@ -80,7 +80,7 @@ export default function Profile() {
     setIsEditingName(false);
     setIsSaving(false);
   };
-  console.log(isUser?.displayName);
+
 
   const handleNameCancel = () => {
     setTempName(isUser?.displayName);  

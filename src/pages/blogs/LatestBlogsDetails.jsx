@@ -56,21 +56,21 @@ const tips = [
 
 export default function LatestBlogsDetails() {
     // const articleData = useLoaderData();
-    // console.log(articleData);
+    
     const {user,loading} = useContext(AuthContext);
     const axiosSecure = useAxiosSecure()
     const [articleData,setArticleData] = useState({})
     const {id} = useParams();
-    // console.log(id)
+    
 
 
     useEffect(()=>{
         axiosSecure.get(`/blogs/details/${id}`)
         .then((res)=>{
-            console.log(res.data)
+          
             setArticleData(res.data)
         }).catch((err)=>{
-            console.log(err.message);
+            
         })
     },[user])
 

@@ -120,12 +120,12 @@ export default function DetailedUserForm({
       userEmail: user?.email,
       status: "pending",
     };
-    // console.log("Form Data:", formData);
+    
 
     axiosSecure
       .post("/booking-policy", bookingUserDetails)
       .then((res) => {
-        console.log("Booking policy successfully", res.data);
+        
         if (res.data.insertedId) {
           closeModal();
           toast.success(

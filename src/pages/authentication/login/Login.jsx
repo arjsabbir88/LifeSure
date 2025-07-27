@@ -66,10 +66,10 @@ export default function Login() {
           userInfo
         );
 
-        console.log("User login or updated:", userRes.data);
+       
 
         toast.success("Login Successfully");
-        console.log("Google login successful", user);
+        
         setLoading(false);
         navigate(from || "/");
       })

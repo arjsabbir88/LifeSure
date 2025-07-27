@@ -16,7 +16,7 @@ const AddBlogs = () => {
     content: "",
   });
 
-  // console.log(import.meta.env.VITE_PHOTOUPLOADE_KEY)
+
   const axiosSecure = useAxiosSecure();
 
   const handleInputChange = (e) => {
@@ -41,7 +41,7 @@ const AddBlogs = () => {
       const data = await response.json();
 
       if (data.success) {
-        console.log("Uploaded Image URL:", data.data.url);
+        
         setImagePreview(data.data.url);
         setImageUrl(data.data.url);
       } else {
@@ -63,7 +63,7 @@ const AddBlogs = () => {
       createdAt: new Date().toISOString(),
     };
 
-    console.log(blogData);
+   
 
     axiosSecure
       .post("/blogs", blogData)
@@ -80,7 +80,7 @@ const AddBlogs = () => {
         }
       })
       .catch((err) => {
-        console.log(err.message)
+    
         toast.error(err.message)
       });
   };

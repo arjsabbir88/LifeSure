@@ -33,7 +33,7 @@ const ManagePolicies = () => {
     },
   });
 
-  // console.log(policies);
+
 
   const handleDelete = async (id) => {
     const confirm = await Swal.fire({
@@ -69,7 +69,6 @@ const ManagePolicies = () => {
       toast.success("Policy updated successfully")
       refetch()
     }).catch(err=>{
-      console.log(err)
       toast.error("Failed to update policy. Please try again.")
     })
   };

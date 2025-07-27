@@ -32,7 +32,7 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
   }, [policy]);
 
   const handlePhotoUpload = async (e) => {
-    console.log("dasf")
+    
     const image = e.target.files[0];
     if (!image) return;
 
@@ -54,7 +54,7 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
 
       if (data.success) {
         const uploadedUrl = data.data.url;
-        console.log("Uploaded Image URL:", uploadedUrl);
+        
 
         // ✅ Update both preview and formData.imageUrl
         setImagePreview(uploadedUrl);
@@ -76,9 +76,8 @@ const EditPolicyModal = ({ isOpen, onClose, policy, onSubmit }) => {
 
   const handleSubmit = (e) => {
   e.preventDefault();
-  console.log(ImagePreview)
+ 
   onSubmit(policy._id, formData);
-  console.log(formData)
   onClose();
 };
 

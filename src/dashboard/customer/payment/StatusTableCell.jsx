@@ -81,7 +81,7 @@ const StatusTableCell = ({ policy}) => {
     setModalOpen(true);
   };
 
-  console.log(policy);
+ 
   return (
     <TableRow key={policy._id} className="hover:bg-muted/50">
       <TableCell>

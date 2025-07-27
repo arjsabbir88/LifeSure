@@ -4,7 +4,7 @@ import PaymentCard from "./PaymentCard";
 
 export default function PayNowModal({ open, onClose, onConfirm, policy,refetch}) {
 
-    // console.log(policy)
+   
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>

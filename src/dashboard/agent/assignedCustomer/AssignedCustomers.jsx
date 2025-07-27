@@ -21,7 +21,7 @@ export default function AssignedCustomers() {
     },
   });
 
-  // console.log(assignedCustomers);
+
 
   const updateStatus = useMutation({
     mutationFn: ({ id, status, adminFeedback }) =>

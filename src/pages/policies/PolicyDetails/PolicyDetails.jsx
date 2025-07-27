@@ -33,7 +33,7 @@ export default function PolicyDetails() {
       return res.data;
     },
   });
-  console.log(checkingPolicy);
+
 
   const checkStatus = (checkingPolicy?.status || "").toLowerCase() === "active";
 
@@ -50,7 +50,7 @@ export default function PolicyDetails() {
 
   const handleBookConsultation = () => {
     // Redirect to agent consultation booking
-    console.log("Redirecting to agent consultation...");
+    
     setIsModalOpen(true);
   };
 
@@ -86,7 +86,7 @@ export default function PolicyDetails() {
       user: user?.email,
     };
 
-    console.log("Form submitted:", finalFormData);
+  
     // You can POST to your backend here
     await axiosSecure
       .post("/agent-consultation", finalFormData)
@@ -116,10 +116,10 @@ export default function PolicyDetails() {
     const formData = new FormData(form);
     const convertedDataEstimate = Object.fromEntries(formData.entries());
     setConvertedData(convertedDataEstimate);
-    console.log("premium estimate data", convertedDataEstimate);
+   
     const { age, coverageAmount, duration, smoker } = convertedDataEstimate;
 
-    console.log(age, coverageAmount, duration, smoker);
+   
 
     // Coverage Amount: $20,00,000
     // Rate per 1000 coverage: $8
@@ -132,13 +132,13 @@ export default function PolicyDetails() {
     const smokerFactor = smoker === "yes" ? 1.3 : 1;
     const durationFactor = duration.includes("10") ? 0.95 : 1;
 
-    // console.log(rateCoverage, ageFactor, smokerFactor, durationFactor)
+    
 
     const basePremium = (coverageAmount / 1000) * rateCoverage;
     const premiumAnnul =
       basePremium * ageFactor * smokerFactor * durationFactor;
     const premiumMonthly = Math.ceil(premiumAnnul / 12);
-    console.log(premiumAnnul, premiumMonthly);
+
 
     setEstimatedPremiumAnnul(premiumAnnul);
     setEstimatedPremiumMonthly(premiumMonthly);

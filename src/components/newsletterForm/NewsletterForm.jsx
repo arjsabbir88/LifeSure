@@ -23,19 +23,17 @@ export default function NewsletterForm() {
         const form = e.target;
         const formData = new FormData(form);
         const convertedData = Object.fromEntries(formData.entries())
-        // console.log(convertedData)
+        
 
 
 
     axios.post('http://localhost:3000/subscription',convertedData)
     .then((res)=>{
-        // console.log(res.data)
         if(res.data.insertedId){
             toast.success("Thanks for Subscription request!!")
             form.reset();
         }
     }).catch((err)=>{
-        console.log(err);
         toast.error(err.message)
     })
 

@@ -38,7 +38,7 @@ const MyPolicy = () => {
       return res.data;
     },
   });
-  console.log(myPolicy)
+ 
   if (isPanding) {
     return <Loader></Loader>;
   }

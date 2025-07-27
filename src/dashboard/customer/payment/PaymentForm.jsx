@@ -8,7 +8,7 @@ import { AuthContext } from "@/authProvider/AuthProvider";
 import { toast } from "sonner";
 
 const PaymentForm = ({ policy }) => {
-  console.log(policy);
+ 
   const stripe = useStripe();
   const elements = useElements();
 
@@ -41,13 +41,13 @@ const PaymentForm = ({ policy }) => {
       type: "card",
       card,
     });
-    console.log(paymentMethod);
+    
 
     if (error) {
       setError(error.message);
     } else {
       setError("");
-      console.log("payment method", paymentMethod);
+     
 
       // step-2: create payment intent
       const res = await axiosSecure.post("/create-payment-intent", {
@@ -55,7 +55,7 @@ const PaymentForm = ({ policy }) => {
         orderIds: policeId,
       });
 
-      console.log("res form intent", res);
+    
 
       const clientSecret = res.data.clientSecret;
 
@@ -75,7 +75,7 @@ const PaymentForm = ({ policy }) => {
         setError(result.error.message);
       } else if (result.paymentIntent.status === "succeeded") {
         setError("");
-        console.log("Payment succeeded!");
+       
 
         const transactionId = result.paymentIntent.id;
 
@@ -95,7 +95,7 @@ const PaymentForm = ({ policy }) => {
           paymentData
         );
 
-        console.log(paymentRes.status);
+        
 
         if (paymentRes.status === 200) {
           //  Show SweetAlert with transaction ID

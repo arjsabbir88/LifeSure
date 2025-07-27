@@ -68,13 +68,13 @@ export default function AddPolicy() {
     convertedData.extraData = extraData;
     convertedData.isActive = true;
     convertedData.rating= 0;
-    console.log("form data", convertedData);
+  
 
     // send data to the server
     axiosSecure
       .post("/policies", convertedData)
       .then((response) => {
-        console.log("policy added successfully", response.data);
+    
 
         if (response.data.insertedId) {
           toast.success("Policy Added Successfully");
@@ -85,7 +85,6 @@ export default function AddPolicy() {
         }
       })
       .catch((error) => {
-        console.log("error adding policy", error);
       });
   };
 

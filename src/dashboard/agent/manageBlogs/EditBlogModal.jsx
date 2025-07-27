@@ -12,7 +12,7 @@ const EditBlogModal = ({ open, onClose, blogData, onUpdate }) => {
   };
 
   const handleSubmit = (e) => {
-    console.log(formData)
+
     e.preventDefault();
      onUpdate(formData);
     onClose();
