@@ -10,71 +10,23 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Link } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import useAxios from "@/hooks/useAxios";
+import Loader from "@/components/Custom/loader/Loader";
 
-// Simulated data - in real app, this would come from your admin panel/API
-// const blogPosts = [
-//   {
-//     id: "1",
-//     title: "The Future of Web Development: Trends to Watch in 2024",
-//     summary:
-//       "Explore the cutting-edge technologies and methodologies that are shaping the future of web development, from AI integration to advanced frameworks.",
-//     category: "Technology",
-//     publishedAt: "2024-01-15",
-//     readTime: "5 min read",
-//     image: "/placeholder.svg?height=200&width=400",
-//     slug: "future-web-development-2024",
-//   },
-//   {
-//     id: "2",
-//     title: "Building Scalable Applications with Next.js 15",
-//     summary:
-//       "Learn how to leverage the latest features in Next.js 15 to build performant, scalable applications that can handle millions of users.",
-//     category: "Development",
-//     publishedAt: "2024-01-12",
-//     readTime: "8 min read",
-//     image: "/placeholder.svg?height=200&width=400",
-//     slug: "scalable-nextjs-applications",
-//   },
-//   {
-//     id: "3",
-//     title: "Design Systems: Creating Consistency at Scale",
-//     summary:
-//       "Discover how to build and maintain design systems that ensure consistency across large-scale applications and teams.",
-//     category: "Design",
-//     publishedAt: "2024-01-10",
-//     readTime: "6 min read",
-//     image: "/placeholder.svg?height=200&width=400",
-//     slug: "design-systems-consistency",
-//   },
-//   {
-//     id: "4",
-//     title: "AI-Powered Development: Tools That Transform Coding",
-//     summary:
-//       "Explore the revolutionary AI tools that are changing how developers write, debug, and optimize code in modern development workflows.",
-//     category: "AI",
-//     publishedAt: "2024-01-08",
-//     readTime: "7 min read",
-//     image: "/placeholder.svg?height=200&width=400",
-//     slug: "ai-powered-development-tools",
-//   },
-// ]
 
 export default function LatestBlogs() {
-  const [blogPosts, setBlogPosts] = useState([]);
+  const axiosInstance = useAxios()
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/blogs")
-      .then((res) => {
-        console.log(res.data);
-        setBlogPosts(res.data);
+   const {data :blogPosts=[], isLoading} = useQuery({
+        queryKey: ['Blogs'],
+        queryFn:async ()=>{
+          const res = await axiosInstance.get('/blogs');
+          return res.data
+        }
       })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }, []);
+
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -89,6 +41,10 @@ export default function LatestBlogs() {
       year: "numeric",
     });
   };
+
+  if(isLoading){
+    return <Loader/>
+  }
 
   return (
     <section className="py-16 px-4 bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900 dark:to-slate-800">

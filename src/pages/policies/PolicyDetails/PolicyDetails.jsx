@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import { AuthContext } from "@/authProvider/AuthProvider";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import Loader from "@/components/Custom/loader/Loader";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "sonner";
 
 // Sample policy data based on your database structure
 
@@ -15,14 +17,11 @@ export default function PolicyDetails() {
   const { user, loading } = useContext(AuthContext);
   const policyData = useLoaderData() || [];
   const bookingPolicyId = policyData._id;
-  console.log(bookingPolicyId);
   const modalRef = useRef();
-
-  console.log(bookingPolicyId);
 
   const {
     isLoading,
-    data: isBooked = false,
+    data: checkingPolicy = {},
     isError,
   } = useQuery({
     queryKey: ["bookingPolicyId", bookingPolicyId],
@@ -34,8 +33,11 @@ export default function PolicyDetails() {
       return res.data;
     },
   });
+  console.log(checkingPolicy);
 
-  console.log("booked policy or not", isBooked);
+  const checkStatus = (checkingPolicy?.status || "").toLowerCase() === "active";
+
+  const isBooked = !!checkingPolicy;
 
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState(
@@ -44,17 +46,12 @@ export default function PolicyDetails() {
   const [estimatedPremiumAnnul, setEstimatedPremiumAnnul] = useState(0);
   const [estimatedPremiumMonthly, setEstimatedPremiumMonthly] = useState(0);
   const [convertedData, setConvertedData] = useState({});
-
-  console.log("policyData.durations", policyData.durations);
-
-  // const handleGetQuote = () => {
-  //   console.log("Redirecting to quote page...");
-  // };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleBookConsultation = () => {
     // Redirect to agent consultation booking
     console.log("Redirecting to agent consultation...");
-    // window.location.href = "/book-consultation"
+    setIsModalOpen(true);
   };
 
   const formatCurrency = (amount) => {
@@ -73,6 +70,44 @@ export default function PolicyDetails() {
     });
   };
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const handleAgentConsultation = async (e) => {
+    e.preventDefault();
+
+    const finalFormData = {
+      ...formData,
+      bookingPolicyId: bookingPolicyId,
+      user: user?.email,
+    };
+
+    console.log("Form submitted:", finalFormData);
+    // You can POST to your backend here
+    await axiosSecure
+      .post("/agent-consultation", finalFormData)
+      .then((res) => {
+        toast.success(
+          "Thanks for agent Consultation!! We will contact you as sone as possible"
+        );
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+
+    setIsModalOpen(false);
+  };
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
   // premium estimate form submission handler
 
   const handlePremiumEstimate = (e) => {
@@ -126,6 +161,12 @@ export default function PolicyDetails() {
             <div className="badge badge-lg mb-4 capitalize px-4 font-bold">
               {policyData.category} Plan
             </div>
+            {checkStatus && (
+              <div className="ml-5 badge badge-lg mb-4 capitalize px-4 font-bold">
+                <h5>Pocily Active Now.</h5>
+                <p>Agent: {checkingPolicy?.assignedAgent?.name}</p>
+              </div>
+            )}
             <h1 className="text-4xl md:text-6xl font-bold mb-4 text-black">
               {policyData.policyTitle}
             </h1>
@@ -483,7 +524,7 @@ export default function PolicyDetails() {
                 <span className="label-text">Gender</span>
               </label>
               <select className="select select-bordered w-full " name="gender">
-                <option disabled selected>
+                <option disabled value="Select Gender">
                   Select Gender
                 </option>
                 <option value="male">Male</option>
@@ -516,7 +557,7 @@ export default function PolicyDetails() {
                 name="duration"
                 required
               >
-                <option disabled selected>
+                <option disabled value="Select Duration">
                   Select Duration
                 </option>
                 {policyData.durations?.map((duration, index) => (
@@ -537,7 +578,7 @@ export default function PolicyDetails() {
                 name="smoker"
                 required
               >
-                <option disabled selected>
+                <option disabled value="Select One">
                   Select one
                 </option>
                 <option value="yes">Yes</option>
@@ -574,6 +615,98 @@ export default function PolicyDetails() {
           />
         </div>
       </dialog>
+
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative bg-white rounded-2xl shadow-xl p-6 w-[90%] max-w-md text-gray-800"
+            >
+              <button
+                className="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl"
+                onClick={() => setIsModalOpen(false)}
+              >
+                ✕
+              </button>
+              <h2 className="text-2xl font-semibold mb-4">
+                Book Agent Consultation
+              </h2>
+              <form onSubmit={handleAgentConsultation} className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-green-700">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full mt-1 px-3 py-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-green-700">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full mt-1 px-3 py-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-green-700">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full mt-1 px-3 py-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-green-700">
+                    Message
+                  </label>
+                  <textarea
+                    name="message"
+                    rows="3"
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full mt-1 px-3 py-2 border border-green-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors"
+                >
+                  Submit Consultation Request
+                </button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -1,14 +1,40 @@
-import React from 'react'
-import { useLoaderData } from 'react-router'
-import InsurancePolicies from './Poli';
+import React from "react";
+import InsurancePolicies from "./InsurancePolicies";
+import useAxios from "@/hooks/useAxios";
+import { useQuery } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
+import { Navigate } from "react-router";
 
 const Policies = () => {
+  const axiosInstance = useAxios();
+
+  const {
+    data: insurancePolicies = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["insurancePolicies"],
+    queryFn: async () => {
+      const res = await axiosInstance("/policies");
+      return res.data;
+    },
+  });
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
+    return <Navigate to="/forbidden"></Navigate>;
+  }
 
   return (
     <div>
-      <InsurancePolicies></InsurancePolicies>
+      <InsurancePolicies
+        insurancePolicies={insurancePolicies}
+      ></InsurancePolicies>
     </div>
-  )
-}
+  );
+};
 
-export default Policies
+export default Policies;

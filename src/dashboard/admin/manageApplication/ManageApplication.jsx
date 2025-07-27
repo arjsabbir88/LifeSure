@@ -17,14 +17,11 @@ const ManageApplications = () => {
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ["applications"],
     queryFn: async () => {
-      console.log("application");
+      
       const res = await axiosSecure.get("/booking-with-policy");
       return res.data;
     },
   });
-
-  console.log(applications);
-  console.log(applications);
 
   const { data: agents = [] } = useQuery({
     queryKey: ["agents"],
@@ -198,7 +195,7 @@ const ManageApplications = () => {
                         className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
                       >
                         <Eye size={18} />
-                        Assign Agent
+                        View Details
                       </button>
                     </td>
                   </tr>

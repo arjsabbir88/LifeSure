@@ -1,15 +1,26 @@
 import Marquee from "react-fast-marquee";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import Loader from "@/components/Custom/loader/Loader";
 
 const ReviewSection = () => {
-  const [reviews, setReviews] = useState([]);
+  // const [reviews, setReviews] = useState([]);
+  const axiosSecure = useAxiosSecure()
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/reviews")
-      .then((res) => setReviews(res.data));
-  }, []);
+     const {data :reviews=[], isLoading} = useQuery({
+        queryKey: ['Blogs'],
+        queryFn:async ()=>{
+          const res = await axiosSecure.get('/blogs');
+          return res.data
+        }
+      })
+
+
+  if(isLoading){
+    return <Loader/>
+  }
 
   return (
     <section className="py-10 bg-gray-50">

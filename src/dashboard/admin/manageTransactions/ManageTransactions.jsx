@@ -60,7 +60,7 @@ const ManageTransactions = () => {
       <div className="flex flex-wrap gap-4">
         {/* Filter by Date (static for now) */}
         <select className="bg-green-100 text-green-900 px-4 py-2 rounded-md">
-          <option disabled selected>
+          <option disabled value="Filter by date">
             Filter by Date
           </option>
           <option value="today">Today</option>
@@ -70,7 +70,7 @@ const ManageTransactions = () => {
 
         {/* Filter by User (dummy for now) */}
         <select className="bg-green-100 text-green-900 px-4 py-2 rounded-md">
-          <option disabled selected>
+          <option disabled value="Filter by User">
             Filter by User
           </option>
           <option value="user1">user1@example.com</option>
@@ -80,7 +80,7 @@ const ManageTransactions = () => {
 
         {/* Filter by Policy (dummy for now) */}
         <select className="bg-green-100 text-green-900 px-4 py-2 rounded-md">
-          <option disabled selected>
+          <option disabled value="Filter by Policy">
             Filter by Policy
           </option>
           <option value="Healthy Future Plan">Healthy Future Plan</option>

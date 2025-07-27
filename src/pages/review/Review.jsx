@@ -2,13 +2,16 @@ import { use, useContext, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "@/authProvider/AuthProvider";
 import { toast } from "sonner";
+import Loader from "@/components/Custom/loader/Loader";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const Review = () => {
   const { user, loading } = useContext(AuthContext);
   const { displayName, email, photoURL } = user;
+  const axiosSecure = useAxiosSecure()
 
   if (loading) {
-    return <p>Loading......</p>;
+    return <Loader/>;
   }
 
   const [success, setSuccess] = useState(null);
@@ -35,11 +38,10 @@ const Review = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/reviews", {
+       await axiosSecure.post("/reviews", {
         ...reviewData,
         createdAt: new Date(),
       });
-      console.log(response.data);
 
       toast.success("Thanks for submitting your review!");
       setSuccess("Thanks for your review! It has been submitted successfully.");

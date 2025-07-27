@@ -1,35 +1,31 @@
 import React, { useContext, useEffect, useState } from "react";
 import HeroSlider from "../../components/Custom/hero/heroSlider/HeroSlider";
-import axios from "axios";
 import MostPurchasedPolicies from "../mostPurchasedPolicies/MostPurchasedPolicies";
 import LifeSureBenefits from "../benefitsOfLifeSure/LifeSureBenefits";
 import ReviewSection from "../review/ReviewSection";
 import LatestBlogs from "../blogs/LatestBlogs";
 import NewsLetter from "@/components/newsLetter/NewsLetter";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "@/hooks/useAxiosSecure";
-import { AuthContext } from "@/authProvider/AuthProvider";
 import AgentMarquee from "../agents/AgentsMarquee";
 import useUserRole from "@/hooks/useUserRole";
 import Loader from "@/components/Custom/loader/Loader";
+import useAxios from "@/hooks/useAxios";
 
 const Home = () => {
-  const [mostPurchased, setMostPurchased] = useState([]);
-  const axiosSecure = useAxiosSecure();
   const {role,roleLoading} = useUserRole()
+  const axiosInstance = useAxios()
 
-  console.log(role)
 
-  useEffect(() => {
-    axios("http://localhost:3000/top-policies")
-      .then((res) => {
-        console.log(res.data);
-        setMostPurchased(res.data)
-      })
-      .catch((err) => console.log(err.message));
-  }, []);
 
-  if(roleLoading){
+    const {data :mostPurchased=[], isLoading} = useQuery({
+      queryKey: ['mostPurchased-Policy'],
+      queryFn:async ()=>{
+        const res = await axiosInstance('/top-policies');
+        return res.data
+      }
+    })
+
+  if(roleLoading || isLoading){
     return <Loader></Loader>
   }
 

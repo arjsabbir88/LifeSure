@@ -6,12 +6,10 @@ import {
   ChevronRightIcon,
   FunnelIcon,
 } from "@heroicons/react/24/outline";
-import { Link, useLoaderData } from "react-router";
+import { Link  } from "react-router";
 
-// Sample insurance policies data
+export default function InsurancePolicies({insurancePolicies}) {
 
-export default function InsurancePolicies() {
-  const insurancePolicies = useLoaderData() || [];
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
@@ -27,7 +25,7 @@ export default function InsurancePolicies() {
     "family"
   ];
 
-  // console.log("insurancePolicies", insurancePolicies);
+
 
   // Filter policies based on selected category
   const filteredPolicies = useMemo(() => {
@@ -53,7 +51,7 @@ export default function InsurancePolicies() {
 
   const handlePolicyClick = (policyId) => {
     // Navigate to policy details page
-    console.log(`Navigate to policy details for ID: ${policyId}`);
+    // console.log(`Navigate to policy details for ID: ${policyId}`);
     // In a real app, you would use router.push(`/policies/${policyId}`)
   };
 
