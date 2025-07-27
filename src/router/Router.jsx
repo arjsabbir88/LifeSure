@@ -17,7 +17,6 @@ import AddBlogs from "@/dashboard/admin/addBlogs/AddBlogs";
 import LatestBlogsDetails from "@/pages/blogs/LatestBlogsDetails";
 import Blogs from "@/pages/blogs/Blogs";
 import Profile from "@/pages/profile/Profile";
-import myPolicy from "@/dashboard/customer/myPolicy/MyPolicy";
 import ClaimRequest from "@/dashboard/customer/claimRequest/ClaimRequest";
 import PaymentStatus from "@/dashboard/customer/payment/PaymentStatus";
 import ManageUser from "@/dashboard/admin/manageUser/ManageUser";
@@ -32,6 +31,7 @@ import AdminRouter from "@/routers/AdminRouter";
 import Forbidden from "@/Error/Forbidden";
 import AgentRouter from "@/routers/AgentRouter";
 import ErrorPage from "@/Error/ErrorPage";
+import MyPolicy from "@/dashboard/customer/myPolicy/MyPolicy";
 
 export const Router = createBrowserRouter([
   {
@@ -218,7 +218,7 @@ export const Router = createBrowserRouter([
           {
             path: "/dashboard/my-policy",
             element: <PrivetRoute>
-              <myPolicy/>
+              <MyPolicy/>
             </PrivetRoute>
             // Component: myPolicy,
           },

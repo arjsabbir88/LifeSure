@@ -12,7 +12,7 @@ const ReviewSection = () => {
      const {data :reviews=[], isLoading} = useQuery({
         queryKey: ['Blogs'],
         queryFn:async ()=>{
-          const res = await axiosSecure.get('/blogs');
+          const res = await axiosSecure.get('/reviews');
           return res.data
         }
       })

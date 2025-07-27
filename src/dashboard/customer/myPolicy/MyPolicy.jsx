@@ -24,7 +24,7 @@ const rowVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-const myPolicy = () => {
+const MyPolicy = () => {
   const { user } = useContext(AuthContext);
 
   const axiosSecure = useAxiosSecure();
@@ -51,7 +51,9 @@ const myPolicy = () => {
     >
       <div className="text-center my-10">
         <h1 className="text-3xl font-bold text-green-950">Policies</h1>
-        <p className="text-gray-400">Manage and organize all your insurance plans in one place.</p>
+        <p className="text-gray-400">
+          Manage and organize all your insurance plans in one place.
+        </p>
       </div>
       <table className="max-w-6xl mx-auto w-full text-sm text-left table-auto border-collapse rounded-xl outline-2 bg-white shadow-xl">
         <thead className="bg-green-300 text-gray-700 uppercase font-medium">
@@ -59,6 +61,7 @@ const myPolicy = () => {
             <th className="px-4 py-3">Policy Name</th>
             <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3">Duration</th>
+            <th className="px-4 py-3">Reject FeedBack</th>
             <th className="px-4 py-3">Premium</th>
             <th className="px-4 py-3 text-right">Action</th>
           </tr>
@@ -83,6 +86,11 @@ const myPolicy = () => {
                 </td>
                 <td className="px-4 py-3">
                   {policy?.convertedData?.duration} years
+                </td>
+                <td>
+                  {policy?.status?.toLowerCase() === "rejected" && (
+                    <span>{policy?.adminFeedback}</span>
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   ${policy.policyDetails?.basePremium} Monthly
@@ -113,4 +121,4 @@ const myPolicy = () => {
   );
 };
 
-export default myPolicy;
+export default MyPolicy;

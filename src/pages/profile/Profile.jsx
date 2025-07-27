@@ -68,62 +68,70 @@ export default function Profile() {
     setIsSaving(true);
 
     setIsUser((prev) => ({ ...prev, displayName: tempName }));
+
+    await updateUserProfile({
+      displayName: tempName,
+    }).then((res) => {
+      toast.success("Profile Updated successfully");
+    }).catch(err=>{
+      toast.error(err.message)
+    });
+
     setIsEditingName(false);
     setIsSaving(false);
-
-   toast.success("Profile Updated successfully");
   };
   console.log(isUser?.displayName);
 
   const handleNameCancel = () => {
-    setTempName(isUser?.displayName);
+    setTempName(isUser?.displayName);  
     setIsEditingName(false);
   };
 
- const handlePhotoUpload = async (e) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const formData = new FormData();
-  formData.append("image", file);
+    const formData = new FormData();
+    formData.append("image", file);
 
-  setIsUploading(true);
+    setIsUploading(true);
 
-  try {
-    const response = await fetch(
-      `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_PHOTOUPLOADE_KEY}`,
-      {
-        method: "POST",
-        body: formData,
+    try {
+      const response = await fetch(
+        `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_PHOTOUPLOADE_KEY
+        }`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        const uploadedUrl = data.data.url;
+
+        await updateUserProfile({
+          displayName: tempName,
+          photoURL: uploadedUrl,
+        });
+
+        setIsUser((prev) => ({ ...prev, photoURL: uploadedUrl }));
+        setImageURL(uploadedUrl);
+
+        toast.success("Profile Updated successfully");
+      } else {
+        console.error("Upload failed:", data);
+        toast.error("Upload failed");
       }
-    );
-
-    const data = await response.json();
-
-    if (data.success) {
-      const uploadedUrl = data.data.url;
-
-      await updateUserProfile({
-        displayName: tempName,
-        photoURL: uploadedUrl,
-      });
-
-      setIsUser((prev) => ({ ...prev, photoURL: uploadedUrl }));
-      setImageURL(uploadedUrl);
-
-      toast.success("Profile Updated successfully");
-    } else {
-      console.error("Upload failed:", data);
-      toast.error("Upload failed");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Something went wrong!");
+    } finally {
+      setIsUploading(false);
     }
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    toast.error("Something went wrong!");
-  } finally {
-    setIsUploading(false);
-  }
-};
-
+  };
 
   const formatLastLogin = (dateString) => {
     const date = new Date(dateString);
@@ -167,9 +175,11 @@ export default function Profile() {
                   />
                   <AvatarFallback className="text-2xl font-bold">
                     {isUser?.displayName
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
+                      ? isUser.displayName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                      : "?"}
                   </AvatarFallback>
                 </Avatar>
 
@@ -261,7 +271,7 @@ export default function Profile() {
                       <Button
                         size="sm"
                         onClick={handleNameSave}
-                        disabled={isSaving || tempName.trim() === ""}
+                        // disabled={isSaving || tempName.trim() === ""}
                         className="bg-green-600 hover:bg-green-700"
                       >
                         {isSaving ? (

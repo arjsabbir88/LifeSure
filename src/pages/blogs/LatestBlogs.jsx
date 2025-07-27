@@ -20,13 +20,14 @@ export default function LatestBlogs() {
   const axiosInstance = useAxios()
 
    const {data :blogPosts=[], isLoading} = useQuery({
-        queryKey: ['Blogs'],
+        queryKey: ['letestBlogs'],
         queryFn:async ()=>{
           const res = await axiosInstance.get('/blogs');
           return res.data
         }
       })
 
+      console.log(blogPosts.length)
 
   const [isVisible, setIsVisible] = useState(false);
 

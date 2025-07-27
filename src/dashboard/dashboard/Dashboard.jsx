@@ -130,6 +130,7 @@ import { Link, Outlet } from "react-router";
 const Dashboard = () => {
   const { user, loading } = useContext(AuthContext);
   const { role, roleLoading } = useUserRole();
+  console.log(role)
 
   if (roleLoading || loading) {
     return <Loader />;
