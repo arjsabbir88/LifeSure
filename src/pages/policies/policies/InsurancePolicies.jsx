@@ -6,13 +6,15 @@ import {
   ChevronRightIcon,
   FunnelIcon,
 } from "@heroicons/react/24/outline";
-import { Link  } from "react-router";
+import { Link } from "react-router";
+import { Search } from "lucide-react";
+import SearchBar from "./SearchBar";
 
-export default function InsurancePolicies({insurancePolicies}) {
-
+export default function InsurancePolicies({ insurancePolicies }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
+  const [searchResults, setSearchResults] = useState(null);
   const policiesPerPage = 6;
   const categories = [
     "All",
@@ -22,11 +24,10 @@ export default function InsurancePolicies({insurancePolicies}) {
     "term-life",
     "critical-illness",
     "disability",
-    "family"
+    "family",
   ];
 
-
-
+  console.log(searchResults);
   // Filter policies based on selected category
   const filteredPolicies = useMemo(() => {
     if (selectedCategory === "All") {
@@ -93,6 +94,9 @@ export default function InsurancePolicies({insurancePolicies}) {
               <FunnelIcon className="w-4 h-4" />
               Filters
             </button>
+            <div className="relative md:block">
+              <SearchBar onResults={(data) => setSearchResults(data)} />
+            </div>
           </div>
 
           {/* Filter Buttons */}
@@ -111,6 +115,9 @@ export default function InsurancePolicies({insurancePolicies}) {
                   {category}
                 </button>
               ))}
+              <div className="relative hidden md:block">
+                <SearchBar onResults={(data) => setSearchResults(data)} />
+              </div>
             </div>
           </div>
         </div>
@@ -155,7 +162,10 @@ export default function InsurancePolicies({insurancePolicies}) {
                   <div className="text-xs text-base-content/60">
                     Coverage: ${policy.coverageRange}
                   </div>
-                  <Link to={`/policiesDetails/${policy._id}`} className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black">
+                  <Link
+                    to={`/policiesDetails/${policy._id}`}
+                    className="btn btn-soft btn-success bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
+                  >
                     View Details
                   </Link>
                 </div>

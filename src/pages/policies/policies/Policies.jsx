@@ -2,8 +2,8 @@ import React from "react";
 import InsurancePolicies from "./InsurancePolicies";
 import useAxios from "@/hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
 import { Navigate } from "react-router";
+import Loader from "@/components/Custom/loader/Loader";
 
 const Policies = () => {
   const axiosInstance = useAxios();
@@ -29,7 +29,7 @@ const Policies = () => {
   }
 
   return (
-    <div>
+    <div className="min-h-screen">
       <InsurancePolicies
         insurancePolicies={insurancePolicies}
       ></InsurancePolicies>

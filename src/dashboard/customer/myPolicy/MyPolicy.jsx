@@ -7,6 +7,7 @@ import { AuthContext } from "@/authProvider/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import Loader from "@/components/Custom/loader/Loader";
+import ApprovedPolicyDownload from "@/pages/policyPdf/ApprovedPolicyDownload";
 
 const statusColor = {
   Approved: "bg-green-500",
@@ -37,7 +38,7 @@ const MyPolicy = () => {
       return res.data;
     },
   });
-
+  console.log(myPolicy)
   if (isPanding) {
     return <Loader></Loader>;
   }
@@ -111,6 +112,7 @@ const MyPolicy = () => {
                   >
                     Review
                   </Link>
+                  {policy?.status?.toLowerCase() === "active" && <ApprovedPolicyDownload policy={policy} />}
                 </td>
               </motion.tr>
             ))}

@@ -110,18 +110,6 @@ export default function NavBar() {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
-            {/* Search bar (hidden on mobile) */}
-            <div className="relative hidden lg:block">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="pl-10 pr-4 py-1.5 border rounded-md text-sm bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <Search
-                size={16}
-                className="absolute left-3 top-2.5 text-gray-500"
-              />
-            </div>
 
             {/* Bell */}
             <div className="hidden lg:block relative cursor-pointer">
