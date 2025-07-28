@@ -6,14 +6,7 @@ LifeSure is a modern MERN stack web application designed to simplify life insura
 
 ## 🚀 Live Site
 
-[Live Demo Link](https://your-lifesure-live-site.com)
-
----
-
-## 👨‍💼 Admin Credentials
-
-- **Email:** admin@example.com
-- **Password:** Admin@123
+[Live Demo Link](https://lifesure-57740.web.app)
 
 ---
 
