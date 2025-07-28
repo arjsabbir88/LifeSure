@@ -120,8 +120,7 @@ LifeSure is a modern MERN stack web application designed to simplify life insura
 
 1. **Clone Client and Server:**
    ```sh
-   git clone https://github.com/yourusername/lifesure-client.git
-   git clone https://github.com/yourusername/lifesure-server.git
+   https://github.com/arjsabbir88/LifeSure.git
    ```
 2. **Install Dependencies:**
    ```sh
