@@ -155,8 +155,7 @@ LifeSure is a modern MERN stack web application designed to simplify life insura
 
 ## 📣 Credits
 
-Built with ❤️ by the LifeSure Dev Team for [Assignment 12, Category 019].
+Built with ❤️ by Tariqul Islam Khan (Sabbir).
 
 ---
 
-> **Note:** For a full feature demonstration, admin credentials, and live site, refer to the top sections above. All code and commits follow best practices and security guidelines.
