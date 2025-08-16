@@ -110,7 +110,7 @@ export default function FAQs() {
       </div>
 
       {/* Contact CTA */}
-      <div className="mt-12 text-center">
+      {/* <div className="mt-12 text-center">
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-100">
           <h3 className="text-xl font-semibold text-gray-900 mb-2">Still have questions?</h3>
           <p className="text-gray-600 mb-4">Our support team is here to help you with any additional questions.</p>
@@ -118,7 +118,7 @@ export default function FAQs() {
             Contact Support
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
