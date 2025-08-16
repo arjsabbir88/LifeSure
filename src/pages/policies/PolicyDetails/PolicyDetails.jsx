@@ -34,7 +34,6 @@ export default function PolicyDetails() {
     },
   });
 
-
   const checkStatus = (checkingPolicy?.status || "").toLowerCase() === "active";
 
   const isBooked = !!checkingPolicy;
@@ -50,7 +49,7 @@ export default function PolicyDetails() {
 
   const handleBookConsultation = () => {
     // Redirect to agent consultation booking
-    
+
     setIsModalOpen(true);
   };
 
@@ -86,7 +85,6 @@ export default function PolicyDetails() {
       user: user?.email,
     };
 
-  
     // You can POST to your backend here
     await axiosSecure
       .post("/agent-consultation", finalFormData)
@@ -116,10 +114,8 @@ export default function PolicyDetails() {
     const formData = new FormData(form);
     const convertedDataEstimate = Object.fromEntries(formData.entries());
     setConvertedData(convertedDataEstimate);
-   
-    const { age, coverageAmount, duration, smoker } = convertedDataEstimate;
 
-   
+    const { age, coverageAmount, duration, smoker } = convertedDataEstimate;
 
     // Coverage Amount: $20,00,000
     // Rate per 1000 coverage: $8
@@ -132,13 +128,10 @@ export default function PolicyDetails() {
     const smokerFactor = smoker === "yes" ? 1.3 : 1;
     const durationFactor = duration.includes("10") ? 0.95 : 1;
 
-    
-
     const basePremium = (coverageAmount / 1000) * rateCoverage;
     const premiumAnnul =
       basePremium * ageFactor * smokerFactor * durationFactor;
     const premiumMonthly = Math.ceil(premiumAnnul / 12);
-
 
     setEstimatedPremiumAnnul(premiumAnnul);
     setEstimatedPremiumMonthly(premiumMonthly);
@@ -393,7 +386,9 @@ export default function PolicyDetails() {
                 <div className="space-y-3">
                   <button
                     className="btn btn-success btn-block bg-gradient-to-r from-green-600 to-green-400 hover:from-green-400 hover:to-green-600 text-white hover:text-black"
-                    // onClick={handleGetQuote}
+                    onClick={() =>
+                      document.getElementById("my_modal_3").showModal()
+                    }
                   >
                     🔍 Get Instant Quote
                   </button>
@@ -406,9 +401,11 @@ export default function PolicyDetails() {
                   <button className="btn btn-outline btn-block">
                     📄 Download Brochure
                   </button>
-                  <button className="btn btn-outline btn-block ">
-                    ❓ FAQ & Support
-                  </button>
+                  <Link to="/faqs">
+                    <button className="btn btn-outline btn-block ">
+                      ❓ FAQ & Support
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
