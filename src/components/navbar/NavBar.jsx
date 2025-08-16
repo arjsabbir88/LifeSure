@@ -119,16 +119,20 @@ export default function NavBar() {
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
             {/* Bell */}
-            <div className="hidden lg:block relative cursor-pointer">
+            {/* <div className="hidden lg:block relative cursor-pointer">
               <Bell className="text-gray-700" size={20} />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full">
                 3
               </span>
-            </div>
+            </div> */}
 
             {/* Avatar */}
             {user ? (
-              <div className="relative">
+              <div className="flex items-center gap-2">
+                <div>
+                  <h1 className="font-bold">{user?.displayName}</h1>
+                </div>
+                <div className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 text-white flex items-center justify-center hover:cursor-pointer"
@@ -151,9 +155,6 @@ export default function NavBar() {
                     >
                       Profile
                     </Link>
-                    <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                      Settings
-                    </a>
                     <hr />
                     <button
                       onClick={handleLogOut}
@@ -163,6 +164,7 @@ export default function NavBar() {
                     </button>
                   </div>
                 )}
+              </div>
               </div>
             ) : (
               auth
