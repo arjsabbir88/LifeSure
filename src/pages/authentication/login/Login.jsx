@@ -10,7 +10,7 @@ import {
   Github,
   Chrome,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { AuthContext } from "@/authProvider/AuthProvider";
 import { toast } from "sonner";
 import useAxios from "@/hooks/useAxios";
@@ -23,14 +23,14 @@ export default function Login() {
     password: "",
   });
 
-   useEffect(() => {
-      document.title = "Login | LifeSure";
-    }, []);
+  useEffect(() => {
+    document.title = "Login | LifeSure";
+  }, []);
 
   const axiosInstance = useAxios();
 
   const navigate = useNavigate();
-  const from = location.state?.from || '/';
+  const from = location.state?.from || "/";
 
   const { user, loading, signIn, googleSignIn, setLoading } =
     useContext(AuthContext);
@@ -70,10 +70,8 @@ export default function Login() {
           userInfo
         );
 
-       
-
         toast.success("Login Successfully");
-        
+
         setLoading(false);
         navigate(from || "/");
       })
@@ -94,6 +92,11 @@ export default function Login() {
       [e.target.name]: e.target.value,
     }));
   };
+
+
+  if(user){
+    return <Navigate to={from || "/"} replace />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 relative overflow-hidden">
