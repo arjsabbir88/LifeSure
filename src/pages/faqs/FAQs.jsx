@@ -109,16 +109,6 @@ export default function FAQs() {
         ))}
       </div>
 
-      {/* Contact CTA */}
-      {/* <div className="mt-12 text-center">
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-100">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Still have questions?</h3>
-          <p className="text-gray-600 mb-4">Our support team is here to help you with any additional questions.</p>
-          <button className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-            Contact Support
-          </button>
-        </div>
-      </div> */}
     </div>
   )
 }

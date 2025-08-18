@@ -95,6 +95,9 @@ export default function NavBar() {
       });
   };
 
+
+ 
+
   return (
     <nav className="bg-white border-b shadow-sm px-4 md:px-6 py-3">
       <div className="max-w-11/12 mx-auto">
@@ -118,13 +121,6 @@ export default function NavBar() {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
-            {/* Bell */}
-            {/* <div className="hidden lg:block relative cursor-pointer">
-              <Bell className="text-gray-700" size={20} />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 rounded-full">
-                3
-              </span>
-            </div> */}
 
             {/* Avatar */}
             {user ? (
