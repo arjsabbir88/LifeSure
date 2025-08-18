@@ -12,7 +12,7 @@ import {
   Chrome,
   UploadCloud,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { AuthContext } from "../../../authProvider/AuthProvider";
 import useAxios from "@/hooks/useAxios";
 import { toast } from "sonner";
@@ -206,6 +206,11 @@ export default function Register() {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
+
+
+  if(user){
+    return <Navigate to={"/"} replace />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-4 relative overflow-hidden">
